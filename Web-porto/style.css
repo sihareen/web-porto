@@ -1,5 +1,6 @@
 body {
   min-height: 2000px;
+  font-family: "Poppins", sans-serif;
 }
 
 .jumbotron {
@@ -15,5 +16,15 @@ body {
 }
 
 section {
-  padding-top: 5rem;
+  padding-top: 1rem;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: 0.3s ease;
+}
+
+html {
+  scroll-behavior: smooth;
 }
