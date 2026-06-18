@@ -4,7 +4,7 @@ import { SectionShell } from "@/components/shared/section-shell";
 
 export function AboutSection() {
   return (
-    <SectionShell id="about" sectionNumber="05" title="Context">
+    <SectionShell id="about" sectionNumber="05" title="About">
       <div className="mx-auto grid max-w-[1100px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-16">
         <div className="relative overflow-hidden rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[0_8px_32px_rgba(29,29,29,0.08)]">
           <div className="aspect-[3/4]">

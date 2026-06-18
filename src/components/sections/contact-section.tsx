@@ -5,7 +5,7 @@ import { contactContent } from "@/data/site-content";
 
 export function ContactSection() {
   return (
-    <SectionShell id="contact" sectionNumber="06" title="Collaboration">
+    <SectionShell id="contact" sectionNumber="06" title="Contact">
       <div className="mx-auto max-w-2xl space-y-8">
         <p className="text-center text-lg leading-[1.7] text-[var(--text-secondary)]">
           Available for intelligent systems engineering projects

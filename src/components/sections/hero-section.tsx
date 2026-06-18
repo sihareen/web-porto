@@ -1,52 +1,46 @@
 export function HeroSection() {
   return (
     <section id="hero" className="relative overflow-hidden border-b border-[var(--border)]">
-      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-[1100px] flex-col justify-center px-6 py-32 sm:px-10 lg:px-12 lg:py-40">
-        <div className="flex max-w-[780px] flex-col gap-12">
-          <div className="flex items-baseline justify-between">
-            <span className="section-number">[01]</span>
-            <span className="text-xs tracking-wide text-[var(--text-secondary)]">Portfolio</span>
+      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-[1100px] flex-col justify-center px-6 py-24 sm:px-10 lg:px-12 lg:py-32">
+        <div className="flex w-full flex-col gap-16">
+          <div className="flex items-center justify-between">
+            <span className="section-number text-base">01</span>
+            <div className="h-px flex-1 bg-[var(--border)] mx-6" />
+            <span className="text-xs font-mono tracking-wider text-[var(--text-secondary)] uppercase">Systems Engineer</span>
           </div>
           
-          <div className="space-y-10">
-            <h1 className="text-[clamp(2.5rem,7vw,4rem)] font-bold leading-[1.1] tracking-[-0.02em] text-[var(--text-primary)]">
-              Muhammad Rizkan Harin Faza
-            </h1>
+          <div className="space-y-12">
+            <div className="space-y-6">
+              <h1 className="text-[clamp(2.75rem,8vw,5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--text-primary)] uppercase">
+                MUHAMMAD RIZKAN<br />HARIN FAZA
+              </h1>
+              
+              <div className="flex flex-col gap-1 text-[clamp(1.125rem,2vw,1.375rem)] font-semibold leading-[1.3] text-[var(--text-secondary)]">
+                <p>IoT Engineer</p>
+                <p>Embedded Systems Developer</p>
+                <p>AI Systems Builder</p>
+              </div>
+            </div>
             
             <div className="h-px w-full bg-[var(--border)]" />
             
-            <div className="space-y-1">
-              <p className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-medium leading-[1.4] text-[var(--text-primary)]">
-                Intelligent Systems Engineer
-              </p>
-            </div>
+            <p className="max-w-[680px] text-[1.25rem] leading-[1.5] text-[var(--text-primary)] font-medium">
+              Building intelligent systems that connect hardware, software, and artificial intelligence.
+            </p>
             
-            <div className="grid gap-2 text-lg leading-[2] text-[var(--text-secondary)] sm:grid-cols-2">
-              <p>IoT Architecture</p>
-              <p>Embedded Development</p>
-              <p>Edge AI Integration</p>
-              <p>Communication Systems</p>
-            </div>
-            
-            <div className="max-w-[560px] rounded-sm border border-[var(--border)] bg-[var(--surface)] p-8">
-              <p className="text-[1.125rem] leading-[1.6] text-[var(--text-primary)]">
-                Building intelligent systems that connect hardware, software, communication networks, and AI.
-              </p>
-            </div>
-            
-            <div className="flex flex-wrap items-center gap-4 pt-4">
+            <div className="flex flex-wrap items-center gap-4 pt-6">
               <a
                 href="#projects"
-                className="inline-flex items-center rounded-sm bg-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-[var(--surface)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(29,29,29,0.2)]"
+                className="inline-flex items-center bg-[var(--text-primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-[var(--surface)] transition-all duration-200 hover:opacity-90"
               >
-                View Work ↓
+                View Projects
               </a>
               <a
                 href="/cv.pdf"
                 download
-                className="inline-flex items-center rounded-sm border border-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-[var(--text-primary)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--text-primary)] hover:text-[var(--surface)]"
+                className="inline-flex items-center border-2 border-[var(--text-primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-[var(--text-primary)] transition-all duration-200 hover:bg-[var(--text-primary)] hover:text-[var(--surface)]"
               >
-                Download CV →
+                Download CV
               </a>
             </div>
           </div>

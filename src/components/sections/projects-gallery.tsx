@@ -113,7 +113,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
 
   const ProjectCard = ({ project, featured = false }: { project: ProjectCardItem; featured?: boolean }) => {
     const coverImage = project.coverImages[0] ?? null;
-    const cardHeight = featured ? "h-[500px]" : "h-[380px]";
+    const cardHeight = featured ? "h-[600px]" : "h-[440px]";
 
     return (
       <article
@@ -126,15 +126,15 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
             openProject(project);
           }
         }}
-        className={`group cursor-pointer overflow-hidden rounded-sm border border-[var(--border)] bg-[var(--surface)] transition-all duration-[320ms] hover:border-[var(--accent)] hover:shadow-[0_16px_64px_rgba(29,29,29,0.15)] ${cardHeight}`}
+        className={`group cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-[280ms] hover:border-[var(--text-primary)] hover:shadow-none ${cardHeight}`}
       >
-        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${featured ? "h-[60%]" : "h-[55%]"}`}>
+        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${featured ? "h-[65%]" : "h-[60%]"}`}>
           {coverImage ? (
             <Image
               src={coverImage}
               alt={project.title}
               fill
-              className="object-cover transition-transform duration-[400ms] group-hover:scale-[1.03]"
+              className="object-cover transition-transform duration-[320ms] group-hover:scale-[1.02]"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           ) : (
@@ -144,17 +144,17 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
           )}
         </div>
 
-        <div className="flex h-[40%] flex-col justify-between p-6">
+        <div className="flex h-[35%] flex-col justify-between p-7">
           <div>
-            <h3 className={`font-semibold leading-tight text-[var(--text-primary)] ${featured ? "text-2xl" : "text-xl"}`}>
+            <h3 className={`font-bold leading-tight text-[var(--text-primary)] uppercase ${featured ? "text-2xl tracking-tight" : "text-lg"}`}>
               {project.title}
             </h3>
-            <p className={`mt-3 leading-[1.6] text-[var(--text-secondary)] line-clamp-2 ${featured ? "text-base" : "text-sm"}`}>
+            <p className={`mt-3 leading-[1.5] text-[var(--text-secondary)] line-clamp-2 ${featured ? "text-base" : "text-sm"}`}>
               {project.description}
             </p>
           </div>
-          <p className="mt-4 text-sm text-[var(--text-secondary)]">
-            {project.techStack.slice(0, 4).join(" · ")}
+          <p className="mt-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+            {project.techStack.slice(0, 3).join(" · ")}
           </p>
         </div>
       </article>
@@ -163,23 +163,23 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
 
   return (
     <>
-      <div className="space-y-20">
+      <div className="space-y-24">
         {categorizedProjects.embedded.length > 0 && (
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
                 Embedded Systems & Edge Devices
               </h3>
               <div className="section-divider" />
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               {categorizedProjects.embedded[0] && (
                 <ProjectCard project={categorizedProjects.embedded[0]} featured />
               )}
               
               {categorizedProjects.embedded.length > 1 && (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-8 md:grid-cols-2">
                   {categorizedProjects.embedded.slice(1).map((project) => (
                     <ProjectCard key={project.title} project={project} />
                   ))}
@@ -190,15 +190,15 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
         )}
 
         {categorizedProjects.monitoring.length > 0 && (
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
                 Intelligent Monitoring Systems
               </h3>
               <div className="section-divider" />
             </div>
             
-            <div className="grid gap-6 md:grid-cols-2">
+            <div className="grid gap-8 md:grid-cols-2">
               {categorizedProjects.monitoring.map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
@@ -207,21 +207,21 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
         )}
 
         {categorizedProjects.ai.length > 0 && (
-          <div className="space-y-8">
-            <div className="space-y-3">
-              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+          <div className="space-y-10">
+            <div className="space-y-4">
+              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
                 Artificial Intelligence
               </h3>
               <div className="section-divider" />
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-8">
               {categorizedProjects.ai[0] && (
                 <ProjectCard project={categorizedProjects.ai[0]} featured />
               )}
               
               {categorizedProjects.ai.length > 1 && (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-8 md:grid-cols-2">
                   {categorizedProjects.ai.slice(1).map((project) => (
                     <ProjectCard key={project.title} project={project} />
                   ))}

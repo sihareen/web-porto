@@ -15,10 +15,10 @@ export default function Home() {
       <SiteHeader />
       <main className="relative">
         <HeroSection />
-        <ExpertiseSection />
         <ProjectsSection />
-        <AboutSection />
         <ExperienceSection />
+        <ExpertiseSection />
+        <AboutSection />
         <ContactSection />
       </main>
       <SiteFooter />

@@ -30,15 +30,15 @@ const capabilities: CapabilityDomain[] = [
 
 export function ExpertiseSection() {
   return (
-    <SectionShell id="skills" sectionNumber="02" title="Engineering Capabilities">
-      <div className="mx-auto max-w-[900px] space-y-4">
+    <SectionShell id="skills" sectionNumber="04" title="Expertise">
+      <div className="mx-auto max-w-[900px] space-y-3">
         {capabilities.map((domain) => (
           <div
             key={domain.category}
-            className="engineering-card rounded-sm p-6"
+            className="engineering-card p-7"
           >
-            <h3 className="mb-3 text-2xl font-semibold text-[var(--text-primary)]">{domain.category}</h3>
-            <p className="text-base leading-relaxed text-[var(--text-secondary)]">
+            <h3 className="mb-4 text-xl font-bold uppercase tracking-tight text-[var(--text-primary)]">{domain.category}</h3>
+            <p className="text-sm font-mono leading-relaxed text-[var(--text-secondary)]">
               {domain.technologies.join(" · ")}
             </p>
           </div>

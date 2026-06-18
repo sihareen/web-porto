@@ -72,7 +72,7 @@ export async function ExperienceSection() {
   const timelineItems = entries.length > 0 ? mapEntriesToTimeline(entries) : fallbackTimelineItems;
 
   return (
-    <SectionShell id="experience" sectionNumber="04" title="Engineering Journey">
+    <SectionShell id="experience" sectionNumber="03" title="Experience">
       <div className="mx-auto max-w-[900px]">
         <ExperienceGallery items={timelineItems} />
       </div>
