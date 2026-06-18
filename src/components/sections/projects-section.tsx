@@ -74,7 +74,7 @@ export async function ProjectsSection() {
         }));
 
   return (
-    <SectionShell id="projects" title="Featured Projects">
+    <SectionShell id="projects" sectionNumber="03" title="Selected Work">
       <ProjectsGallery projects={displayProjects} />
     </SectionShell>
   );

@@ -5,35 +5,21 @@ import { contactContent } from "@/data/site-content";
 
 export function ContactSection() {
   return (
-    <SectionShell id="contact" title="Contact">
-      <div className="flex flex-wrap items-center justify-center gap-4">
-        <a
-          href={`mailto:${contactContent.email}`}
-          className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-          aria-label="Email"
-        >
-          <FiMail className="h-5 w-5 text-cyan-300" aria-hidden />
-        </a>
+    <SectionShell id="contact" sectionNumber="06" title="Collaboration">
+      <div className="mx-auto max-w-2xl space-y-8">
+        <p className="text-center text-lg leading-[1.7] text-[var(--text-secondary)]">
+          Available for intelligent systems engineering projects
+        </p>
 
-        <a
-          href={contactContent.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-          aria-label="LinkedIn"
-        >
-          <FiLinkedin className="h-5 w-5 text-cyan-300" aria-hidden />
-        </a>
-
-        <a
-          href={contactContent.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/15 bg-white/[0.02] text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-          aria-label="GitHub"
-        >
-          <FiGithub className="h-5 w-5 text-cyan-300" aria-hidden />
-        </a>
+        <div className="flex justify-center">
+          <a
+            href={`mailto:${contactContent.email}`}
+            className="inline-flex items-center gap-3 rounded-sm bg-[var(--text-primary)] px-8 py-4 text-base font-medium text-[var(--surface)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(29,29,29,0.2)]"
+          >
+            <FiMail className="h-5 w-5" />
+            {contactContent.email}
+          </a>
+        </div>
       </div>
     </SectionShell>
   );

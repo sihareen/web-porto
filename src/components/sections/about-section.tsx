@@ -4,40 +4,39 @@ import { SectionShell } from "@/components/shared/section-shell";
 
 export function AboutSection() {
   return (
-    <SectionShell id="about" title="About">
-      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-black">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-          <div className="aspect-[4/5]">
+    <SectionShell id="about" sectionNumber="05" title="Context">
+      <div className="mx-auto grid max-w-[1100px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-16">
+        <div className="relative overflow-hidden rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[0_8px_32px_rgba(29,29,29,0.08)]">
+          <div className="aspect-[3/4]">
             <Image
               src="/profile/me.jpg"
-              alt="Professional portrait"
+              alt="Muhammad Rizkan Harin Faza"
               width={900}
-              height={1100}
+              height={1200}
               className="h-full w-full object-cover object-center"
             />
           </div>
         </div>
 
-        <div className="space-y-6">
-          <p className="text-xs uppercase tracking-[0.24em] text-cyan-300">Professional Profile</p>
-          <p className="text-base leading-8 text-white/75">
-            I am an Electrical Engineering graduate specializing in IoT architecture, embedded platforms, and
-            intelligent analytics. My work combines reliable hardware integration, clean firmware design, and
-            data-driven decision systems for real-world operations.
-          </p>
-          <p className="text-base leading-8 text-white/75">
-            I focus on maintainable engineering, measurable outcomes, and solutions that bridge physical systems with
-            scalable digital intelligence.
-          </p>
-
-          <div className="rounded-xl border border-cyan-300/25 bg-cyan-500/5 p-5">
-            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-cyan-300">
-              Let&apos;s Collaborate
+        <div className="flex flex-col justify-center space-y-8">
+          <div className="space-y-6 text-lg leading-[1.8] text-[var(--text-primary)]">
+            <p>
+              I architect intelligent systems from embedded hardware through cloud integration. My work spans the complete engineering stack: hardware interfacing, firmware development, communication protocols, backend systems, and AI deployment.
             </p>
-            <p className="mt-2 text-sm leading-7 text-white/70">
-              Open to IoT, embedded, and AI engineering collaborations for product development, automation, and
-              research-driven implementation.
+            <p>
+              Projects range from tsunami early warning buoys and emergency VoIP systems to AI-powered quality control and autonomous edge devices. Each implementation emphasizes reliable field operation, maintainable architecture, and measurable outcomes.
+            </p>
+            <p>
+              Electrical Engineering graduate from Universitas Lampung. Thesis focused on Python-based transmission systems for remote ocean monitoring platforms.
+            </p>
+          </div>
+
+          <div className="rounded-sm border-l-[3px] border-l-[var(--accent)] bg-[var(--surface)] p-6">
+            <p className="text-base font-medium text-[var(--text-primary)]">
+              Open to collaboration on intelligent systems projects
+            </p>
+            <p className="mt-2 text-base leading-[1.7] text-[var(--text-secondary)]">
+              IoT architecture · Embedded development · Edge AI · System integration
             </p>
           </div>
         </div>

@@ -1,70 +1,54 @@
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
-
-import { contactContent } from "@/data/site-content";
-
 export function HeroSection() {
   return (
-    <section id="hero" className="relative overflow-hidden border-b border-white/10">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(255,255,255,0.08),transparent_36%)]" />
-      <div className="mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-[1320px] gap-12 px-6 py-14 sm:px-10 lg:grid-cols-[1.08fr_1fr] lg:items-center lg:px-12 lg:py-16">
-        <div className="z-10 flex max-w-[660px] flex-col items-start gap-6 lg:gap-7">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Portfolio</p>
-          <h1 className="font-[family-name:var(--font-heading)] text-5xl leading-[0.98] text-white sm:text-6xl lg:text-7xl xl:text-[6.25rem]">
-            <span className="block">Muhammad Rizkan</span>
-            <span className="block">Harin Faza</span>
-          </h1>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
-            IoT & Embedded Systems Engineer
-          </p>
-          <p className="max-w-[560px] text-base leading-8 text-white/70 lg:text-lg">
-            Electrical Engineering graduate focused on intelligent connected systems, embedded technology, AI, and
-            data-driven solutions.
-          </p>
-          <div className="flex flex-wrap items-center gap-5">
-            <a
-              href="#projects"
-              className="inline-flex items-center rounded-md border border-cyan-300/40 bg-cyan-400/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200 transition hover:-translate-y-0.5 hover:border-cyan-300"
-            >
-              View Portfolio
-            </a>
-            <a
-              href="/cv.pdf"
-              download
-              className="inline-flex items-center rounded-md border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/85 transition hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-300"
-            >
-              Download CV
-            </a>
+    <section id="hero" className="relative overflow-hidden border-b border-[var(--border)]">
+      <div className="mx-auto flex min-h-[calc(100vh-80px)] w-full max-w-[1100px] flex-col justify-center px-6 py-32 sm:px-10 lg:px-12 lg:py-40">
+        <div className="flex max-w-[780px] flex-col gap-12">
+          <div className="flex items-baseline justify-between">
+            <span className="section-number">[01]</span>
+            <span className="text-xs tracking-wide text-[var(--text-secondary)]">Portfolio</span>
           </div>
-        </div>
-
-        <div className="relative mx-auto flex w-full max-w-[620px] flex-col items-center justify-center gap-6">
-          {/* <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-300">Contact</p> */}
-          <div className="flex items-center justify-center gap-5">
-            <a
-              href={`mailto:${contactContent.email}`}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="Email"
-            >
-              <FiMail className="h-5 w-5" />
-            </a>
-            <a
-              href={contactContent.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="LinkedIn"
-            >
-              <FiLinkedin className="h-5 w-5" />
-            </a>
-            <a
-              href={contactContent.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="GitHub"
-            >
-              <FiGithub className="h-5 w-5" />
-            </a>
+          
+          <div className="space-y-10">
+            <h1 className="text-[clamp(2.5rem,7vw,4rem)] font-bold leading-[1.1] tracking-[-0.02em] text-[var(--text-primary)]">
+              Muhammad Rizkan Harin Faza
+            </h1>
+            
+            <div className="h-px w-full bg-[var(--border)]" />
+            
+            <div className="space-y-1">
+              <p className="text-[clamp(1.25rem,2.5vw,1.5rem)] font-medium leading-[1.4] text-[var(--text-primary)]">
+                Intelligent Systems Engineer
+              </p>
+            </div>
+            
+            <div className="grid gap-2 text-lg leading-[2] text-[var(--text-secondary)] sm:grid-cols-2">
+              <p>IoT Architecture</p>
+              <p>Embedded Development</p>
+              <p>Edge AI Integration</p>
+              <p>Communication Systems</p>
+            </div>
+            
+            <div className="max-w-[560px] rounded-sm border border-[var(--border)] bg-[var(--surface)] p-8">
+              <p className="text-[1.125rem] leading-[1.6] text-[var(--text-primary)]">
+                Building intelligent systems that connect hardware, software, communication networks, and AI.
+              </p>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <a
+                href="#projects"
+                className="inline-flex items-center rounded-sm bg-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-[var(--surface)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(29,29,29,0.2)]"
+              >
+                View Work ↓
+              </a>
+              <a
+                href="/cv.pdf"
+                download
+                className="inline-flex items-center rounded-sm border border-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-[var(--text-primary)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--text-primary)] hover:text-[var(--surface)]"
+              >
+                Download CV →
+              </a>
+            </div>
           </div>
         </div>
       </div>

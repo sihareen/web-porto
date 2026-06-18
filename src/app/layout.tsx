@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Orbitron, Space_Grotesk } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const headingFont = Orbitron({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["500", "700"],
-});
-
-const bodyFont = Space_Grotesk({
+const inter = Inter({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
+
+// Use same font for headings
+const headingFont = inter;
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://hspace.vercel.app"),
@@ -52,8 +50,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${headingFont.variable} ${bodyFont.variable} h-full antialiased`}>
-      <body className="min-h-full bg-[#0b0f19] text-slate-100">{children}</body>
+    <html lang="en" className={`${headingFont.variable} h-full antialiased`}>
+      <body className="min-h-full">{children}</body>
     </html>
   );
 }

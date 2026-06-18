@@ -16,6 +16,27 @@ type ExperienceGalleryProps = {
   items: ExperienceCardItem[];
 };
 
+type Phase = {
+  label: string;
+  color: string;
+};
+
+function determinePhase(period: string, category: string): Phase {
+  if (period.includes("2025") || period.includes("2026")) {
+    return { label: "DEPLOYMENT & INTEGRATION", color: "var(--accent)" };
+  }
+  if (period.includes("2023") || period.includes("2024")) {
+    if (category === "EDUCATION") {
+      return { label: "ARTIFICIAL INTELLIGENCE", color: "var(--accent)" };
+    }
+    return { label: "SYSTEMS DEVELOPMENT", color: "var(--accent)" };
+  }
+  if (category === "EDUCATION") {
+    return { label: "FOUNDATION", color: "var(--accent)" };
+  }
+  return { label: "EARLY DEVELOPMENT", color: "var(--accent)" };
+}
+
 export function ExperienceGallery({ items }: ExperienceGalleryProps) {
   const [activeItem, setActiveItem] = useState<ExperienceCardItem | null>(null);
 
@@ -36,71 +57,93 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
 
   return (
     <>
-      <div className="grid gap-4 lg:grid-cols-3">
-        {items.map((item) => (
-          <article
-            key={`${item.period}-${item.title}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => setActiveItem(item)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setActiveItem(item);
-              }
-            }}
-            className="cursor-pointer rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/35"
-          >
-            <p className="text-[11px] uppercase tracking-[0.2em] text-cyan-300">{item.period}</p>
-            <h3 className="mt-3 text-lg font-semibold text-white">{item.title}</h3>
-            {item.company ? <p className="mt-1 text-sm text-slate-300">{item.company}</p> : null}
-            <p className="truncate-3 mt-3 text-sm leading-7 text-white/70">{item.description}</p>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {item.tags.map((tag) => (
-                <li
-                  key={`${item.title}-${tag}`}
-                  className="rounded-full border border-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/65"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-[10px] uppercase tracking-[0.2em] text-white/45">{item.category}</p>
-            <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-cyan-300/85">View details</p>
-          </article>
-        ))}
+      <div className="space-y-16">
+        {items.map((item, index) => {
+          const phase = determinePhase(item.period, item.category);
+          
+          return (
+            <article
+              key={`${item.period}-${item.title}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => setActiveItem(item)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setActiveItem(item);
+                }
+              }}
+              className="group cursor-pointer"
+              style={{
+                animation: `slide-up-stagger 420ms cubic-bezier(0.4, 0, 0.2, 1) ${index * 80}ms backwards`
+              }}
+            >
+              <div className="flex items-center gap-6 mb-6">
+                <span className="text-sm font-semibold tabular-nums text-[var(--accent)]">
+                  {item.period}
+                </span>
+                <div className="flex items-center gap-4">
+                  <div className="h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+                  <div className="h-px flex-1 w-32 bg-[var(--border)]" />
+                </div>
+              </div>
+              
+              <div className="pl-0 sm:pl-16">
+                <div className="mb-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+                    {phase.label}
+                  </p>
+                </div>
+                
+                <div className="engineering-card rounded-sm p-8 transition-transform duration-280 hover:translate-x-1">
+                  <h3 className="text-2xl font-semibold text-[var(--text-primary)]">{item.title}</h3>
+                  {item.company && (
+                    <p className="mt-2 text-lg text-[var(--text-secondary)]">{item.company}</p>
+                  )}
+                  <p className="mt-4 text-base leading-[1.7] text-[var(--text-secondary)]">{item.description}</p>
+                  
+                  <div className="mt-6">
+                    <p className="text-sm text-[var(--text-secondary)]">
+                      {item.tags.join(" · ")}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
 
       {activeItem ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-8 backdrop-blur-sm sm:px-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/97 px-4 py-8 backdrop-blur-xl sm:px-6">
           <button type="button" className="absolute inset-0" aria-label="Close popup" onClick={() => setActiveItem(null)} />
 
-          <article className="relative z-10 w-full max-w-2xl rounded-2xl border border-white/10 bg-[#090b0f] p-7 shadow-[0_35px_90px_rgba(0,0,0,0.8)] sm:p-8">
+          <article className="relative z-10 w-full max-w-2xl rounded-sm border border-[var(--border)] bg-white p-10 shadow-[0_24px_80px_rgba(29,29,29,0.25)] sm:p-12">
             <button
               type="button"
               onClick={() => setActiveItem(null)}
-              className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white/80 transition hover:border-cyan-300/50 hover:text-cyan-300"
+              className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:border-[var(--text-primary)]"
               aria-label="Close details"
             >
               <FiX />
             </button>
 
-            <p className="text-[11px] uppercase tracking-[0.2em] text-cyan-300">{activeItem.period}</p>
-            <h3 className="mt-3 text-2xl font-semibold text-white">{activeItem.title}</h3>
-            {activeItem.company ? <p className="mt-2 text-sm text-slate-300">{activeItem.company}</p> : null}
-            <p className="mt-4 text-sm leading-8 text-white/75">{activeItem.description}</p>
+            <p className="text-sm font-semibold tabular-nums text-[var(--accent)]">{activeItem.period}</p>
+            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
+              {determinePhase(activeItem.period, activeItem.category).label}
+            </p>
+            
+            <h3 className="mt-4 text-3xl font-semibold text-[var(--text-primary)]">{activeItem.title}</h3>
+            {activeItem.company && (
+              <p className="mt-2 text-lg text-[var(--text-secondary)]">{activeItem.company}</p>
+            )}
+            <p className="mt-6 text-base leading-[1.8] text-[var(--text-secondary)]">{activeItem.description}</p>
 
-            <ul className="mt-5 flex flex-wrap gap-2">
-              {activeItem.tags.map((tag) => (
-                <li
-                  key={`${activeItem.title}-popup-${tag}`}
-                  className="rounded-full border border-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-white/65"
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-white/45">{activeItem.category}</p>
+            <div className="mt-6">
+              <p className="text-sm text-[var(--text-secondary)]">
+                {activeItem.tags.join(" · ")}
+              </p>
+            </div>
           </article>
         </div>
       ) : null}

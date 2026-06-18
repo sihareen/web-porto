@@ -19,31 +19,50 @@ type ProjectsGalleryProps = {
   projects: ProjectCardItem[];
 };
 
-const filters: Array<"All" | ProjectCategory> = ["All", "IoT", "AI", "Data"];
+type CapabilityDomain = "embedded" | "monitoring" | "ai";
+
+function categorizeProject(project: ProjectCardItem): CapabilityDomain {
+  const title = project.title.toLowerCase();
+  const desc = project.description.toLowerCase();
+  const tech = project.techStack.join(" ").toLowerCase();
+  const combined = `${title} ${desc} ${tech}`;
+
+  if (/voip|priscop|raspbot|sbc|vending|embedded/.test(combined)) {
+    return "embedded";
+  }
+  
+  if (/yolo|tensorflow|ai|classification|computer vision|machine learning/.test(combined)) {
+    return "ai";
+  }
+  
+  return "monitoring";
+}
 
 function isGitHubUrl(url: string) {
   return /github\.com/i.test(url);
 }
 
 export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
-  const [activeFilter, setActiveFilter] = useState<(typeof filters)[number]>("All");
-  const [showAll, setShowAll] = useState(false);
   const [activeProject, setActiveProject] = useState<ProjectCardItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  const filteredProjects = useMemo(() => {
-    if (activeFilter === "All") {
-      return projects;
-    }
+  const categorizedProjects = useMemo(() => {
+    const embedded: ProjectCardItem[] = [];
+    const monitoring: ProjectCardItem[] = [];
+    const ai: ProjectCardItem[] = [];
 
-    return projects.filter((project) => project.labels.includes(activeFilter));
-  }, [activeFilter, projects]);
+    projects.forEach((project) => {
+      const category = categorizeProject(project);
+      if (category === "embedded") embedded.push(project);
+      else if (category === "ai") ai.push(project);
+      else monitoring.push(project);
+    });
+
+    return { embedded, monitoring, ai };
+  }, [projects]);
 
   const activeProjectImages = activeProject?.coverImages ?? [];
   const activeImage = activeProjectImages[activeImageIndex] ?? null;
-  const DEFAULT_VISIBLE_COUNT = 8;
-  const visibleProjects = showAll ? filteredProjects : filteredProjects.slice(0, DEFAULT_VISIBLE_COUNT);
-  const hasMoreProjects = filteredProjects.length > DEFAULT_VISIBLE_COUNT;
 
   useEffect(() => {
     if (!activeProject) {
@@ -83,133 +102,146 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   }
 
   function nextImage() {
-    if (activeProjectImages.length <= 1) {
-      return;
-    }
-
+    if (activeProjectImages.length <= 1) return;
     setActiveImageIndex((prev) => (prev + 1) % activeProjectImages.length);
   }
 
   function prevImage() {
-    if (activeProjectImages.length <= 1) {
-      return;
-    }
-
+    if (activeProjectImages.length <= 1) return;
     setActiveImageIndex((prev) => (prev - 1 + activeProjectImages.length) % activeProjectImages.length);
   }
 
+  const ProjectCard = ({ project, featured = false }: { project: ProjectCardItem; featured?: boolean }) => {
+    const coverImage = project.coverImages[0] ?? null;
+    const cardHeight = featured ? "h-[500px]" : "h-[380px]";
+
+    return (
+      <article
+        role="button"
+        tabIndex={0}
+        onClick={() => openProject(project)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            openProject(project);
+          }
+        }}
+        className={`group cursor-pointer overflow-hidden rounded-sm border border-[var(--border)] bg-[var(--surface)] transition-all duration-[320ms] hover:border-[var(--accent)] hover:shadow-[0_16px_64px_rgba(29,29,29,0.15)] ${cardHeight}`}
+      >
+        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${featured ? "h-[60%]" : "h-[55%]"}`}>
+          {coverImage ? (
+            <Image
+              src={coverImage}
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-[400ms] group-hover:scale-[1.03]"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[var(--text-secondary)]">
+              {project.labels[0] ?? "Project"}
+            </div>
+          )}
+        </div>
+
+        <div className="flex h-[40%] flex-col justify-between p-6">
+          <div>
+            <h3 className={`font-semibold leading-tight text-[var(--text-primary)] ${featured ? "text-2xl" : "text-xl"}`}>
+              {project.title}
+            </h3>
+            <p className={`mt-3 leading-[1.6] text-[var(--text-secondary)] line-clamp-2 ${featured ? "text-base" : "text-sm"}`}>
+              {project.description}
+            </p>
+          </div>
+          <p className="mt-4 text-sm text-[var(--text-secondary)]">
+            {project.techStack.slice(0, 4).join(" · ")}
+          </p>
+        </div>
+      </article>
+    );
+  };
+
   return (
     <>
-      <div className="space-y-10">
-        <div className="flex flex-wrap gap-2">
-          {filters.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => {
-                setActiveFilter(filter);
-                setShowAll(false);
-              }}
-              className={`rounded-full border px-4 py-2 text-xs uppercase tracking-[0.15em] transition ${
-                activeFilter === filter
-                  ? "border-cyan-300/60 bg-cyan-500/10 text-cyan-300"
-                  : "border-white/15 text-white/65 hover:border-cyan-300/35 hover:text-cyan-300"
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {visibleProjects.map((project) => {
-            const coverImage = project.coverImages[0] ?? null;
-
-            return (
-              <article
-                key={`${project.title}-${project.labels.join("-")}`}
-                role="button"
-                tabIndex={0}
-                onClick={() => openProject(project)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
-                    event.preventDefault();
-                    openProject(project);
-                  }
-                }}
-                className="group cursor-pointer overflow-hidden rounded-3xl border border-white/10 bg-black transition duration-300 hover:-translate-y-1 hover:border-cyan-300/35"
-              >
-                <div className="relative h-48 overflow-hidden border-b border-white/10 bg-[linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.01))]">
-                  {coverImage ? (
-                    <Image
-                      src={coverImage}
-                      alt={project.title}
-                      fill
-                      className="object-cover opacity-80 transition duration-500 group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-xs uppercase tracking-[0.18em] text-white/55">
-                      {project.labels[0] ?? "Project"} Project
-                    </div>
-                  )}
-                  <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-                    {project.labels.map((label) => (
-                      <span
-                        key={`${project.title}-label-${label}`}
-                        className="rounded-full border border-cyan-300/40 bg-black/60 px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-cyan-300"
-                      >
-                        {label}
-                      </span>
-                    ))}
-                  </div>
+      <div className="space-y-20">
+        {categorizedProjects.embedded.length > 0 && (
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+                Embedded Systems & Edge Devices
+              </h3>
+              <div className="section-divider" />
+            </div>
+            
+            <div className="space-y-6">
+              {categorizedProjects.embedded[0] && (
+                <ProjectCard project={categorizedProjects.embedded[0]} featured />
+              )}
+              
+              {categorizedProjects.embedded.length > 1 && (
+                <div className="grid gap-6 md:grid-cols-2">
+                  {categorizedProjects.embedded.slice(1).map((project) => (
+                    <ProjectCard key={project.title} project={project} />
+                  ))}
                 </div>
-
-                <div className="space-y-5 p-6">
-                  <h3 className="text-xl font-semibold text-white">{project.title}</h3>
-                  <p className="truncate-3 min-h-24 text-sm leading-7 text-white/70">{project.description}</p>
-
-                  <ul className="flex flex-wrap gap-2">
-                    {project.techStack.map((stack) => (
-                      <li
-                        key={`${project.title}-${stack}`}
-                        className="rounded-full border border-white/15 px-2.5 py-1 text-[10px] uppercase tracking-[0.12em] text-white/65"
-                      >
-                        {stack}
-                      </li>
-                    ))}
-                  </ul>
-
-                  <p className="pt-1 text-[11px] uppercase tracking-[0.16em] text-cyan-300/85">Click card to view</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-
-        {hasMoreProjects ? (
-          <div className="flex justify-center">
-            <button
-              type="button"
-              onClick={() => setShowAll((prev) => !prev)}
-              className="rounded-full border border-cyan-300/45 bg-cyan-500/10 px-5 py-2 text-xs uppercase tracking-[0.16em] text-cyan-300 transition hover:border-cyan-300"
-            >
-              {showAll ? "Less" : `More (${filteredProjects.length - DEFAULT_VISIBLE_COUNT})`}
-            </button>
+              )}
+            </div>
           </div>
-        ) : null}
+        )}
+
+        {categorizedProjects.monitoring.length > 0 && (
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+                Intelligent Monitoring Systems
+              </h3>
+              <div className="section-divider" />
+            </div>
+            
+            <div className="grid gap-6 md:grid-cols-2">
+              {categorizedProjects.monitoring.map((project) => (
+                <ProjectCard key={project.title} project={project} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {categorizedProjects.ai.length > 0 && (
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--text-secondary)]">
+                Artificial Intelligence
+              </h3>
+              <div className="section-divider" />
+            </div>
+            
+            <div className="space-y-6">
+              {categorizedProjects.ai[0] && (
+                <ProjectCard project={categorizedProjects.ai[0]} featured />
+              )}
+              
+              {categorizedProjects.ai.length > 1 && (
+                <div className="grid gap-6 md:grid-cols-2">
+                  {categorizedProjects.ai.slice(1).map((project) => (
+                    <ProjectCard key={project.title} project={project} />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {activeProject ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 px-4 py-8 backdrop-blur-sm sm:px-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/97 px-4 py-8 backdrop-blur-xl sm:px-6">
           <button type="button" className="absolute inset-0" aria-label="Close popup" onClick={closeProject} />
 
-          <article className="relative z-10 grid w-full max-w-5xl overflow-hidden rounded-2xl border border-white/10 bg-[#090b0f] shadow-[0_35px_90px_rgba(0,0,0,0.8)] lg:grid-cols-[1.2fr_1fr]">
-            <div className="relative min-h-[320px] border-b border-white/10 bg-black lg:min-h-[520px] lg:border-b-0 lg:border-r">
+          <article className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-sm border border-[var(--border)] bg-white shadow-[0_24px_80px_rgba(29,29,29,0.25)] lg:grid-cols-[1.3fr_1fr]">
+            <div className="relative min-h-[420px] border-b border-[var(--border)] bg-[var(--background)] lg:min-h-[640px] lg:border-b-0 lg:border-r">
               <button
                 type="button"
                 onClick={closeProject}
-                className="absolute right-4 top-4 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-black/60 text-white/80 transition hover:border-cyan-300/50 hover:text-cyan-300"
+                className="absolute right-5 top-5 z-20 inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:border-[var(--text-primary)]"
                 aria-label="Close project popup"
               >
                 <FiX />
@@ -221,16 +253,16 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
                     src={activeImage}
                     alt={`${activeProject.title} preview ${activeImageIndex + 1}`}
                     fill
-                    className="object-contain p-4"
+                    className="object-contain p-12"
                     sizes="(max-width: 1024px) 100vw, 60vw"
                   />
 
-                  {activeProjectImages.length > 1 ? (
+                  {activeProjectImages.length > 1 && (
                     <>
                       <button
                         type="button"
                         onClick={prevImage}
-                        className="absolute left-3 top-1/2 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white/85 transition hover:border-cyan-300/50 hover:text-cyan-300"
+                        className="absolute left-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:bg-[var(--text-primary)] hover:text-white"
                         aria-label="Previous image"
                       >
                         <FiChevronLeft />
@@ -238,67 +270,51 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
                       <button
                         type="button"
                         onClick={nextImage}
-                        className="absolute right-3 top-1/2 z-20 inline-flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/65 text-white/85 transition hover:border-cyan-300/50 hover:text-cyan-300"
+                        className="absolute right-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:bg-[var(--text-primary)] hover:text-white"
                         aria-label="Next image"
                       >
                         <FiChevronRight />
                       </button>
+                      
+                      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-sm border border-[var(--border)] bg-white px-4 py-2 shadow-sm">
+                        {activeProjectImages.map((_, index) => (
+                          <button
+                            type="button"
+                            key={`${activeProject.title}-dot-${index}`}
+                            onClick={() => setActiveImageIndex(index)}
+                            className={`h-2 w-2 rounded-full transition-all ${
+                              activeImageIndex === index ? "w-6 bg-[var(--accent)]" : "bg-[var(--border)]"
+                            }`}
+                            aria-label={`Show image ${index + 1}`}
+                          />
+                        ))}
+                      </div>
                     </>
-                  ) : null}
-
-                  {activeProjectImages.length > 1 ? (
-                    <div className="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border border-white/20 bg-black/65 px-3 py-1.5">
-                      {activeProjectImages.map((_, index) => (
-                        <button
-                          type="button"
-                          key={`${activeProject.title}-dot-${index}`}
-                          onClick={() => setActiveImageIndex(index)}
-                          className={`h-2.5 w-2.5 rounded-full ${
-                            activeImageIndex === index ? "bg-cyan-300" : "bg-white/35"
-                          }`}
-                          aria-label={`Show image ${index + 1}`}
-                        />
-                      ))}
-                    </div>
-                  ) : null}
+                  )}
                 </>
               ) : (
-                <div className="absolute inset-0 flex items-center justify-center text-xs uppercase tracking-[0.18em] text-white/60">
+                <div className="absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[var(--text-secondary)]">
                   No Image Preview
                 </div>
               )}
             </div>
 
-            <div className="p-6 sm:p-7">
-              <div className="flex flex-wrap gap-2">
-                {activeProject.labels.map((label) => (
-                  <p key={`${activeProject.title}-popup-label-${label}`} className="text-[11px] uppercase tracking-[0.18em] text-cyan-300">
-                    {label}
-                  </p>
-                ))}
-              </div>
-              <h3 className="mt-3 text-2xl font-semibold text-white">{activeProject.title}</h3>
-              <p className="mt-4 text-sm leading-7 text-white/75">{activeProject.description}</p>
+            <div className="p-12 sm:p-14">
+              <h3 className="text-3xl font-semibold text-[var(--text-primary)]">{activeProject.title}</h3>
+              <p className="mt-6 text-base leading-[1.8] text-[var(--text-secondary)]">{activeProject.description}</p>
 
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {activeProject.techStack.map((stack) => (
-                  <li
-                    key={`${activeProject.title}-popup-${stack}`}
-                    className="rounded-full border border-white/15 px-3 py-1 text-[10px] uppercase tracking-[0.13em] text-white/65"
-                  >
-                    {stack}
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-6 text-sm leading-relaxed text-[var(--text-secondary)]">
+                {activeProject.techStack.join(" · ")}
+              </p>
 
               <a
                 href={activeProject.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-7 inline-flex items-center gap-2 rounded-md border border-cyan-300/45 bg-cyan-500/10 px-4 py-2.5 text-xs uppercase tracking-[0.15em] text-cyan-300 transition hover:border-cyan-300"
+                className="mt-8 inline-flex items-center gap-2 rounded-sm bg-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-white transition-all duration-280 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(29,29,29,0.2)]"
               >
                 {isGitHubUrl(activeProject.externalUrl) ? <FiGithub aria-hidden /> : <FiExternalLink aria-hidden />}
-                View
+                View Project
               </a>
             </div>
           </article>

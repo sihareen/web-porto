@@ -15,9 +15,9 @@ export default function Home() {
       <SiteHeader />
       <main className="relative">
         <HeroSection />
-        <AboutSection />
         <ExpertiseSection />
         <ProjectsSection />
+        <AboutSection />
         <ExperienceSection />
         <ContactSection />
       </main>

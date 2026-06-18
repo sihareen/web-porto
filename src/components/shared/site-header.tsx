@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 const navItems = [
   { label: "Home", href: "#hero", id: "hero" },
-  { label: "About", href: "#about", id: "about" },
-  { label: "Skills", href: "#skills", id: "skills" },
-  { label: "Projects", href: "#projects", id: "projects" },
+  { label: "Capabilities", href: "#skills", id: "skills" },
+  { label: "Work", href: "#projects", id: "projects" },
+  { label: "Context", href: "#about", id: "about" },
+  { label: "Journey", href: "#experience", id: "experience" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
@@ -43,22 +44,22 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between px-6 py-4 sm:px-10 lg:px-12">
+    <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-xl">
+      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between px-6 py-5 sm:px-10 lg:px-12">
         <a
           href="#hero"
-          className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-[0.35em] text-white"
+          className="text-xs font-semibold uppercase tracking-[0.25em] text-[var(--text-primary)]"
         >
-          Hspace
+          RHF
         </a>
         <nav aria-label="Primary" className="overflow-x-auto">
-          <ul className="flex min-w-max items-center gap-4 lg:gap-7">
+          <ul className="flex min-w-max items-center gap-8">
             {navItems.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className={`text-[11px] uppercase tracking-[0.2em] transition ${
-                    item.id === activeSection ? "text-cyan-300" : "text-white/75 hover:text-cyan-300"
+                  className={`text-sm font-medium transition-colors duration-280 ${
+                    item.id === activeSection ? "font-semibold text-[var(--text-primary)]" : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {item.label}
