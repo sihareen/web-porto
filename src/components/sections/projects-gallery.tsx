@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiChevronLeft, FiChevronRight, FiExternalLink, FiGithub, FiX } from "react-icons/fi";
 
 export type ProjectCategory = "IoT" | "AI" | "Data";
@@ -26,50 +26,66 @@ function isGitHubUrl(url: string) {
 export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   const [activeProject, setActiveProject] = useState<ProjectCardItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [carouselIndex, setCarouselIndex] = useState(0);
-  const [showAllProjects, setShowAllProjects] = useState(false);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const pauseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const activeProjectImages = activeProject?.coverImages ?? [];
   const activeImage = activeProjectImages[activeImageIndex] ?? null;
 
-  // Calculate visible projects (4 on desktop, 2 on tablet, 1 on mobile)
-  const getVisibleCount = () => {
-    if (typeof window === 'undefined') return 4;
-    if (window.innerWidth >= 1024) return 4;
-    if (window.innerWidth >= 640) return 2;
-    return 1;
-  };
+  // Duplicate projects for infinite scroll
+  const duplicatedProjects = [...projects, ...projects, ...projects];
 
-  const [visibleCount, setVisibleCount] = useState(getVisibleCount());
-
+  // Auto-scroll effect
   useEffect(() => {
-    const handleResize = () => {
-      setVisibleCount(getVisibleCount());
+    if (isHovered || isPaused) return;
+
+    const scrollSpeed = 0.3; // pixels per frame (very slow)
+    let animationFrameId: number;
+
+    const animate = () => {
+      setScrollPosition((prev) => {
+        const container = scrollContainerRef.current;
+        if (!container) return prev;
+
+        const cardWidth = 350; // approximate card width + gap
+        const maxScroll = projects.length * cardWidth;
+        
+        const newPosition = prev + scrollSpeed;
+        
+        // Reset when we've scrolled through one set of projects
+        if (newPosition >= maxScroll) {
+          return 0;
+        }
+        
+        return newPosition;
+      });
+
+      animationFrameId = requestAnimationFrame(animate);
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
-  const maxIndex = Math.max(0, projects.length - visibleCount);
-  const canScrollLeft = carouselIndex > 0;
-  const canScrollRight = carouselIndex < maxIndex;
+    animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isHovered, isPaused, projects.length]);
 
   useEffect(() => {
-    if (!activeProject && !showAllProjects) {
+    if (!activeProject) {
       return;
     }
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        if (activeProject) {
-          setActiveProject(null);
-        } else if (showAllProjects) {
-          setShowAllProjects(false);
-        }
+        setActiveProject(null);
       }
 
-      if (activeProject && activeProjectImages.length > 1) {
+      if (activeProjectImages.length > 1) {
         if (event.key === "ArrowRight") {
           setActiveImageIndex((prev) => (prev + 1) % activeProjectImages.length);
         }
@@ -82,7 +98,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [activeProject, showAllProjects, activeProjectImages.length]);
+  }, [activeProject, activeProjectImages.length]);
 
   function openProject(project: ProjectCardItem) {
     setActiveProject(project);
@@ -104,17 +120,36 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
     setActiveImageIndex((prev) => (prev - 1 + activeProjectImages.length) % activeProjectImages.length);
   }
 
-  function scrollCarouselLeft() {
-    setCarouselIndex((prev) => Math.max(0, prev - 1));
+  function scrollToPrevious() {
+    const cardWidth = 350;
+    setScrollPosition((prev) => Math.max(0, prev - cardWidth));
+    
+    // Pause auto-scroll for 5 seconds after manual interaction
+    setIsPaused(true);
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 5000);
   }
 
-  function scrollCarouselRight() {
-    setCarouselIndex((prev) => Math.min(maxIndex, prev + 1));
+  function scrollToNext() {
+    const cardWidth = 350;
+    setScrollPosition((prev) => prev + cardWidth);
+    
+    // Pause auto-scroll for 5 seconds after manual interaction
+    setIsPaused(true);
+    if (pauseTimeoutRef.current) {
+      clearTimeout(pauseTimeoutRef.current);
+    }
+    pauseTimeoutRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 5000);
   }
 
-  const ProjectCard = ({ project, size = "normal" }: { project: ProjectCardItem; size?: "normal" | "grid" }) => {
+  const ProjectCard = ({ project }: { project: ProjectCardItem }) => {
     const coverImage = project.coverImages[0] ?? null;
-    const isGrid = size === "grid";
 
     return (
       <article
@@ -127,19 +162,17 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
             openProject(project);
           }
         }}
-        className={`group cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-lg ${
-          isGrid ? "" : "flex-shrink-0"
-        }`}
-        style={isGrid ? {} : { width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})` }}
+        className="group flex-shrink-0 cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-lg"
+        style={{ width: "320px" }}
       >
-        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${isGrid ? "h-[280px]" : "h-[320px]"}`}>
+        <div className="relative h-[320px] overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)]">
           {coverImage ? (
             <Image
               src={coverImage}
               alt={project.title}
               fill
               className="object-cover transition-transform duration-320 group-hover:scale-[1.03]"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              sizes="320px"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[var(--text-secondary)]">
@@ -148,16 +181,16 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
           )}
         </div>
 
-        <div className={`flex flex-col justify-between p-6 ${isGrid ? "h-[160px]" : "h-[180px]"}`}>
+        <div className="flex flex-col justify-between p-6 h-[180px]">
           <div>
-            <h3 className={`font-bold leading-tight text-[var(--primary)] uppercase line-clamp-2 ${isGrid ? "text-base" : "text-lg"}`}>
+            <h3 className="text-lg font-bold leading-tight text-[var(--primary)] uppercase line-clamp-2">
               {project.title}
             </h3>
-            <p className={`mt-3 leading-[1.5] text-[var(--text-secondary)] line-clamp-2 ${isGrid ? "text-xs" : "text-sm"}`}>
+            <p className="mt-3 text-sm leading-[1.5] text-[var(--text-secondary)] line-clamp-2">
               {project.description}
             </p>
           </div>
-          <p className={`mt-4 font-mono uppercase tracking-wider text-[var(--accent)] ${isGrid ? "text-[10px]" : "text-xs"}`}>
+          <p className="mt-4 text-xs font-mono uppercase tracking-wider text-[var(--accent)]">
             {project.techStack.slice(0, 3).join(" · ")}
           </p>
         </div>
@@ -169,99 +202,45 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
     <>
       <div className="space-y-8">
         {/* Carousel Container */}
-        <div className="relative">
+        <div 
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
           {/* Navigation Arrows */}
-          {canScrollLeft && (
-            <button
-              onClick={scrollCarouselLeft}
-              className="absolute left-0 top-1/2 z-10 -translate-y-1/2 -translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
-              aria-label="Previous projects"
-            >
-              <FiChevronLeft className="h-6 w-6" />
-            </button>
-          )}
+          <button
+            onClick={scrollToPrevious}
+            className="absolute left-0 top-1/2 z-10 -translate-y-1/2 -translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
+            aria-label="Previous projects"
+          >
+            <FiChevronLeft className="h-6 w-6" />
+          </button>
           
-          {canScrollRight && (
-            <button
-              onClick={scrollCarouselRight}
-              className="absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
-              aria-label="Next projects"
-            >
-              <FiChevronRight className="h-6 w-6" />
-            </button>
-          )}
+          <button
+            onClick={scrollToNext}
+            className="absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
+            aria-label="Next projects"
+          >
+            <FiChevronRight className="h-6 w-6" />
+          </button>
 
           {/* Carousel Track */}
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" ref={scrollContainerRef}>
             <div
-              className="flex gap-6 transition-transform duration-400 ease-out"
-              style={{ transform: `translateX(-${carouselIndex * (100 / visibleCount + 2.4)}%)` }}
+              className="flex gap-8"
+              style={{ 
+                transform: `translateX(-${scrollPosition}px)`,
+                transition: 'none',
+                willChange: 'transform'
+              }}
             >
-              {projects.slice(0, 4).map((project) => (
-                <ProjectCard key={project.title} project={project} />
+              {duplicatedProjects.map((project, index) => (
+                <ProjectCard key={`${project.title}-${index}`} project={project} />
               ))}
             </div>
           </div>
         </div>
-
-        {/* View All Button */}
-        <div className="flex justify-center pt-4">
-          <button
-            onClick={() => setShowAllProjects(true)}
-            className="inline-flex items-center border-2 border-[var(--primary)] px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white"
-          >
-            View All Projects
-          </button>
-        </div>
-
-        {/* Carousel Indicators */}
-        {projects.length > visibleCount && (
-          <div className="flex justify-center gap-2 pt-2">
-            {Array.from({ length: Math.min(maxIndex + 1, 1) }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCarouselIndex(index)}
-                className={`h-1.5 transition-all ${
-                  carouselIndex === index
-                    ? "w-8 bg-[var(--accent)]"
-                    : "w-1.5 bg-[var(--border)] hover:bg-[var(--secondary)]"
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
-
-      {/* All Projects Modal */}
-      {showAllProjects && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-[var(--background)]/98 backdrop-blur-xl">
-          <div className="min-h-screen px-6 py-12 sm:px-10 lg:px-12">
-            <div className="mx-auto max-w-[1320px]">
-              {/* Header */}
-              <div className="mb-12 flex items-center justify-between">
-                <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold uppercase tracking-tight text-[var(--primary)]">
-                  All Projects
-                </h2>
-                <button
-                  onClick={() => setShowAllProjects(false)}
-                  className="inline-flex h-12 w-12 items-center justify-center border-2 border-[var(--primary)] bg-white text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white"
-                  aria-label="Close all projects"
-                >
-                  <FiX className="h-6 w-6" />
-                </button>
-              </div>
-
-              {/* Projects Grid */}
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {projects.map((project) => (
-                  <ProjectCard key={project.title} project={project} size="grid" />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Project Detail Modal */}
       {activeProject ? (
