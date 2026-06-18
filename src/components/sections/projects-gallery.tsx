@@ -27,6 +27,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   const [activeProject, setActiveProject] = useState<ProjectCardItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [showAllProjects, setShowAllProjects] = useState(false);
 
   const activeProjectImages = activeProject?.coverImages ?? [];
   const activeImage = activeProjectImages[activeImageIndex] ?? null;
@@ -55,31 +56,33 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   const canScrollRight = carouselIndex < maxIndex;
 
   useEffect(() => {
-    if (!activeProject) {
+    if (!activeProject && !showAllProjects) {
       return;
     }
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
-        setActiveProject(null);
+        if (activeProject) {
+          setActiveProject(null);
+        } else if (showAllProjects) {
+          setShowAllProjects(false);
+        }
       }
 
-      if (activeProjectImages.length <= 1) {
-        return;
-      }
+      if (activeProject && activeProjectImages.length > 1) {
+        if (event.key === "ArrowRight") {
+          setActiveImageIndex((prev) => (prev + 1) % activeProjectImages.length);
+        }
 
-      if (event.key === "ArrowRight") {
-        setActiveImageIndex((prev) => (prev + 1) % activeProjectImages.length);
-      }
-
-      if (event.key === "ArrowLeft") {
-        setActiveImageIndex((prev) => (prev - 1 + activeProjectImages.length) % activeProjectImages.length);
+        if (event.key === "ArrowLeft") {
+          setActiveImageIndex((prev) => (prev - 1 + activeProjectImages.length) % activeProjectImages.length);
+        }
       }
     }
 
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [activeProject, activeProjectImages.length]);
+  }, [activeProject, showAllProjects, activeProjectImages.length]);
 
   function openProject(project: ProjectCardItem) {
     setActiveProject(project);
@@ -109,8 +112,9 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
     setCarouselIndex((prev) => Math.min(maxIndex, prev + 1));
   }
 
-  const ProjectCard = ({ project }: { project: ProjectCardItem }) => {
+  const ProjectCard = ({ project, size = "normal" }: { project: ProjectCardItem; size?: "normal" | "grid" }) => {
     const coverImage = project.coverImages[0] ?? null;
+    const isGrid = size === "grid";
 
     return (
       <article
@@ -123,17 +127,19 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
             openProject(project);
           }
         }}
-        className="group flex-shrink-0 cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-lg"
-        style={{ width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})` }}
+        className={`group cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-lg ${
+          isGrid ? "" : "flex-shrink-0"
+        }`}
+        style={isGrid ? {} : { width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})` }}
       >
-        <div className="relative h-[320px] overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)]">
+        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${isGrid ? "h-[280px]" : "h-[320px]"}`}>
           {coverImage ? (
             <Image
               src={coverImage}
               alt={project.title}
               fill
               className="object-cover transition-transform duration-320 group-hover:scale-[1.03]"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[var(--text-secondary)]">
@@ -142,16 +148,16 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
           )}
         </div>
 
-        <div className="flex flex-col justify-between p-6 h-[180px]">
+        <div className={`flex flex-col justify-between p-6 ${isGrid ? "h-[160px]" : "h-[180px]"}`}>
           <div>
-            <h3 className="text-lg font-bold leading-tight text-[var(--primary)] uppercase line-clamp-2">
+            <h3 className={`font-bold leading-tight text-[var(--primary)] uppercase line-clamp-2 ${isGrid ? "text-base" : "text-lg"}`}>
               {project.title}
             </h3>
-            <p className="mt-3 text-sm leading-[1.5] text-[var(--text-secondary)] line-clamp-2">
+            <p className={`mt-3 leading-[1.5] text-[var(--text-secondary)] line-clamp-2 ${isGrid ? "text-xs" : "text-sm"}`}>
               {project.description}
             </p>
           </div>
-          <p className="mt-4 text-xs font-mono uppercase tracking-wider text-[var(--accent)]">
+          <p className={`mt-4 font-mono uppercase tracking-wider text-[var(--accent)] ${isGrid ? "text-[10px]" : "text-xs"}`}>
             {project.techStack.slice(0, 3).join(" · ")}
           </p>
         </div>
@@ -191,7 +197,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
               className="flex gap-6 transition-transform duration-400 ease-out"
               style={{ transform: `translateX(-${carouselIndex * (100 / visibleCount + 2.4)}%)` }}
             >
-              {projects.map((project) => (
+              {projects.slice(0, 4).map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
@@ -200,18 +206,18 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
 
         {/* View All Button */}
         <div className="flex justify-center pt-4">
-          <a
-            href="#projects-all"
+          <button
+            onClick={() => setShowAllProjects(true)}
             className="inline-flex items-center border-2 border-[var(--primary)] px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white"
           >
             View All Projects
-          </a>
+          </button>
         </div>
 
         {/* Carousel Indicators */}
         {projects.length > visibleCount && (
           <div className="flex justify-center gap-2 pt-2">
-            {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+            {Array.from({ length: Math.min(maxIndex + 1, 1) }).map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCarouselIndex(index)}
@@ -226,6 +232,36 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
           </div>
         )}
       </div>
+
+      {/* All Projects Modal */}
+      {showAllProjects && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-[var(--background)]/98 backdrop-blur-xl">
+          <div className="min-h-screen px-6 py-12 sm:px-10 lg:px-12">
+            <div className="mx-auto max-w-[1320px]">
+              {/* Header */}
+              <div className="mb-12 flex items-center justify-between">
+                <h2 className="text-[clamp(2rem,4vw,3rem)] font-bold uppercase tracking-tight text-[var(--primary)]">
+                  All Projects
+                </h2>
+                <button
+                  onClick={() => setShowAllProjects(false)}
+                  className="inline-flex h-12 w-12 items-center justify-center border-2 border-[var(--primary)] bg-white text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white"
+                  aria-label="Close all projects"
+                >
+                  <FiX className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Projects Grid */}
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {projects.map((project) => (
+                  <ProjectCard key={project.title} project={project} size="grid" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Project Detail Modal */}
       {activeProject ? (
