@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiX } from "react-icons/fi";
+import { FiX, FiCalendar } from "react-icons/fi";
 
 type ExperienceCardItem = {
   period: string;
@@ -66,14 +66,17 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                             </p>
                           )}
 
-                          <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)]">
+                          <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-2">
+                            <FiCalendar className="h-3 w-3" />
                             {item.period}
                           </p>
                         </article>
 
                         {!isLastInRow && (
-                          <div className="absolute top-1/2 -right-3 z-10 flex items-center -translate-y-1/2">
-                            <div className="w-12 h-px border-t border-dashed border-[var(--border)] opacity-60" />
+                          <div className="absolute top-1/2 -right-3 z-10 flex items-center -translate-y-1/2 gap-0">
+                            <div className="w-5 h-px border-t border-dashed border-[var(--border)] opacity-60" />
+                            <div className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-40" />
+                            <div className="w-5 h-px border-t border-dashed border-[var(--border)] opacity-60" />
                           </div>
                         )}
                       </div>
@@ -107,7 +110,8 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                         </p>
                       )}
 
-                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)]">
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] flex items-center gap-2">
+                        <FiCalendar className="h-3 w-3" />
                         {item.period}
                       </p>
                     </article>
