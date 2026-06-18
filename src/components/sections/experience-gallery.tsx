@@ -44,9 +44,9 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
 
                   return (
                     <div key={actualIndex} className="relative">
-                      {/* Card - Larger Size */}
+                      {/* Card - Fixed Height */}
                       <article 
-                        className="group relative border-2 border-[var(--border)] bg-[var(--surface)] p-6 transition-all duration-240 hover:border-[var(--accent)] hover:shadow-md cursor-pointer"
+                        className="group relative border-2 border-[var(--border)] bg-[var(--surface)] p-6 h-[200px] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-md cursor-pointer"
                         onMouseEnter={() => setHoveredIndex(actualIndex)}
                         onMouseLeave={() => setHoveredIndex(null)}
                       >
@@ -140,7 +140,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                 return (
                   <article 
                     key={actualIndex}
-                    className="border-2 border-[var(--border)] bg-[var(--surface)] p-4"
+                    className="border-2 border-[var(--border)] bg-[var(--surface)] p-4 h-[160px]"
                     onClick={() => setHoveredIndex(isHovered ? null : actualIndex)}
                   >
                     {/* Milestone Number & Icon */}
