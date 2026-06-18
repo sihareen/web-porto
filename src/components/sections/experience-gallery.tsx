@@ -45,7 +45,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                       )}
                     </div>
 
-                    <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
+                    <h3 className="text-[0.95rem] font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                       {item.title}
                     </h3>
 
@@ -91,7 +91,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                     )}
                   </div>
 
-                  <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
+                  <h3 className="text-[0.8325rem] font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                     {item.title}
                   </h3>
 
