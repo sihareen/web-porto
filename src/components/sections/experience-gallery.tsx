@@ -48,19 +48,21 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                     <h3 className="text-[0.95rem] font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                       {item.title}
                     </h3>
+                  </div>
 
+                  <div className="flex-shrink-0">
                     {item.company && (
-                      <p className="text-sm text-[var(--accent)] break-words overflow-wrap-anywhere">
+                      <p className="text-sm text-[var(--accent)] break-words overflow-wrap-anywhere pb-3">
                         {item.company}
                       </p>
                     )}
-                  </div>
 
-                  <div className="border-t border-[var(--border)] pt-3 mt-3 flex-shrink-0">
-                    <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
-                      <FiCalendar className="h-3.5 w-3.5 flex-shrink-0" />
-                      {item.period}
-                    </p>
+                    <div className="border-t border-[var(--border)] pt-3">
+                      <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
+                        <FiCalendar className="h-3.5 w-3.5 flex-shrink-0" />
+                        {item.period}
+                      </p>
+                    </div>
                   </div>
                 </article>
 
@@ -94,19 +96,21 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                   <h3 className="text-[0.8325rem] font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                     {item.title}
                   </h3>
+                </div>
 
+                <div className="flex-shrink-0">
                   {item.company && (
-                    <p className="text-xs text-[var(--accent)] break-words overflow-wrap-anywhere">
+                    <p className="text-xs text-[var(--accent)] break-words overflow-wrap-anywhere pb-2">
                       {item.company}
                     </p>
                   )}
-                </div>
 
-                <div className="border-t border-[var(--border)] pt-3 mt-2 flex-shrink-0">
-                  <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
-                    <FiCalendar className="h-3 w-3 flex-shrink-0" />
-                    {item.period}
-                  </p>
+                  <div className="border-t border-[var(--border)] pt-2">
+                    <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
+                      <FiCalendar className="h-3 w-3 flex-shrink-0" />
+                      {item.period}
+                    </p>
+                  </div>
                 </div>
               </article>
             );
