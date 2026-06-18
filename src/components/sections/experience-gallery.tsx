@@ -18,25 +18,19 @@ type ExperienceGalleryProps = {
 
 export function ExperienceGallery({ items }: ExperienceGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
 
   return (
     <>
-      <div className="max-w-[1280px] mx-auto">
+      <div className="max-w-[1472px] mx-auto">
         <div className="hidden md:grid md:grid-cols-4 gap-6">
           {items.map((item, actualIndex) => {
             const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
-            const isLastInRow = (actualIndex + 1) % 4 === 0;
-            const isHovered = hoveredIndex === actualIndex;
-
             return (
               <div key={actualIndex} className="relative">
                 <article 
-                  className="group relative border border-[var(--border)] bg-white p-7 h-[288px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col overflow-hidden"
-                  onMouseEnter={() => setHoveredIndex(actualIndex)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="group relative border border-[var(--border)] bg-white p-7 h-[302px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col overflow-hidden"
                   onClick={() => setSelectedIndex(actualIndex)}
                 >
                   <div className="flex-1 min-h-0 flex flex-col">
@@ -70,13 +64,6 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                   </div>
                 </article>
 
-                {!isLastInRow && (
-                  <div className="absolute top-1/2 -right-3 z-10 flex items-center -translate-y-1/2 gap-0">
-                    <div className="w-5 h-px border-t border-dashed border-[var(--accent)] opacity-50" />
-                    <div className="w-2 h-2 border border-[var(--accent)] bg-white opacity-60" />
-                    <div className="w-5 h-px border-t border-dashed border-[var(--accent)] opacity-50" />
-                  </div>
-                )}
               </div>
             );
           })}
@@ -89,7 +76,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
             return (
               <article 
                 key={actualIndex}
-                className="border border-[var(--border)] bg-white p-6 h-[240px] cursor-pointer hover:border-[var(--accent)] flex flex-col overflow-hidden"
+                className="border border-[var(--border)] bg-white p-6 h-[252px] cursor-pointer hover:border-[var(--accent)] flex flex-col overflow-hidden"
                 onClick={() => setSelectedIndex(actualIndex)}
               >
                 <div className="flex-1 min-h-0 flex flex-col">
