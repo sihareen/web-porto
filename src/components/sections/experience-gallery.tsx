@@ -34,37 +34,37 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
             return (
               <div key={actualIndex} className="relative">
                 <article 
-                  className="group relative border border-[var(--border)] bg-white p-6 h-[240px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col justify-between"
+                  className="group relative border border-[var(--border)] bg-white p-6 h-[240px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col overflow-hidden"
                   onMouseEnter={() => setHoveredIndex(actualIndex)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => setSelectedIndex(actualIndex)}
                 >
-                  <div>
-                    <div className="flex items-start justify-between mb-5">
+                  <div className="flex-1 min-h-0 flex flex-col">
+                    <div className="flex items-start justify-between mb-4 flex-shrink-0">
                       <span className="text-5xl font-black font-mono text-[var(--accent)] leading-none">
                         {milestoneNumber}
                       </span>
                       {item.category === "EDUCATION" ? (
-                        <FiBookOpen className="h-7 w-7 text-[var(--accent)]" />
+                        <FiBookOpen className="h-7 w-7 text-[var(--accent)] flex-shrink-0" />
                       ) : (
-                        <FiBriefcase className="h-7 w-7 text-[var(--accent)]" />
+                        <FiBriefcase className="h-7 w-7 text-[var(--accent)] flex-shrink-0" />
                       )}
                     </div>
 
-                    <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-3 leading-snug">
+                    <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                       {item.title}
                     </h3>
 
                     {item.company && (
-                      <p className="text-sm text-[var(--accent)] mb-4">
+                      <p className="text-sm text-[var(--accent)] break-words overflow-wrap-anywhere">
                         {item.company}
                       </p>
                     )}
                   </div>
 
-                  <div className="border-t border-[var(--border)] pt-3">
+                  <div className="border-t border-[var(--border)] pt-3 mt-3 flex-shrink-0">
                     <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
-                      <FiCalendar className="h-3.5 w-3.5" />
+                      <FiCalendar className="h-3.5 w-3.5 flex-shrink-0" />
                       {item.period}
                     </p>
                   </div>
@@ -89,35 +89,35 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
             return (
               <article 
                 key={actualIndex}
-                className="border border-[var(--border)] bg-white p-5 h-[200px] cursor-pointer hover:border-[var(--accent)] flex flex-col justify-between"
+                className="border border-[var(--border)] bg-white p-5 h-[200px] cursor-pointer hover:border-[var(--accent)] flex flex-col overflow-hidden"
                 onClick={() => setSelectedIndex(actualIndex)}
               >
-                <div>
-                  <div className="flex items-start justify-between mb-4">
+                <div className="flex-1 min-h-0 flex flex-col">
+                  <div className="flex items-start justify-between mb-3 flex-shrink-0">
                     <span className="text-4xl font-black font-mono text-[var(--accent)] leading-none">
                       {milestoneNumber}
                     </span>
                     {item.category === "EDUCATION" ? (
-                      <FiBookOpen className="h-6 w-6 text-[var(--accent)]" />
+                      <FiBookOpen className="h-6 w-6 text-[var(--accent)] flex-shrink-0" />
                     ) : (
-                      <FiBriefcase className="h-6 w-6 text-[var(--accent)]" />
+                      <FiBriefcase className="h-6 w-6 text-[var(--accent)] flex-shrink-0" />
                     )}
                   </div>
 
-                  <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-snug">
+                  <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-tight break-words overflow-wrap-anywhere">
                     {item.title}
                   </h3>
 
                   {item.company && (
-                    <p className="text-xs text-[var(--accent)] mb-3">
+                    <p className="text-xs text-[var(--accent)] break-words overflow-wrap-anywhere">
                       {item.company}
                     </p>
                   )}
                 </div>
 
-                <div className="border-t border-[var(--border)] pt-3">
+                <div className="border-t border-[var(--border)] pt-3 mt-2 flex-shrink-0">
                   <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
-                    <FiCalendar className="h-3 w-3" />
+                    <FiCalendar className="h-3 w-3 flex-shrink-0" />
                     {item.period}
                   </p>
                 </div>
