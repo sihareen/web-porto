@@ -1,9 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #050608;
-  --fg: #f5f7fa;
-  --accent: #22d3ee;
+  --bg: #f7f5f0;
+  --surface: #fcfbf8;
+  --text: #1d1d1d;
+  --muted: #6b6b6b;
+  --accent: #65705a;
+  --accent-2: #8a7d6b;
+  --line: #ddd8ce;
+  --image-wash: #ece7dc;
 }
 
 * {
@@ -17,12 +22,9 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  color: var(--fg);
+  color: var(--text);
   font-family: var(--font-body), sans-serif;
-  background:
-    radial-gradient(circle at 80% -10%, rgba(255, 255, 255, 0.08), transparent 34%),
-    radial-gradient(circle at 10% 120%, rgba(34, 211, 238, 0.07), transparent 32%),
-    linear-gradient(180deg, #07090c 0%, #040507 100%);
+  background: var(--bg);
 }
 
 body::before {
@@ -30,12 +32,9 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.06), transparent 42%);
-  opacity: 0.55;
-}
-
-main {
-  animation: fade-up 420ms ease-out;
+  background-image: linear-gradient(rgba(29, 29, 29, 0.035) 1px, transparent 1px);
+  background-size: 100% 12px;
+  opacity: 0.42;
 }
 
 .truncate-3 {
@@ -45,23 +44,25 @@ main {
   overflow: hidden;
 }
 
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.text-balance {
+  text-wrap: balance;
+}
+
+.editorial-link {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition: background-size 180ms ease, color 180ms ease;
+}
+
+.editorial-link:hover {
+  background-size: 0 1px;
+  color: var(--accent);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-
-  main {
-    animation: none;
   }
 }

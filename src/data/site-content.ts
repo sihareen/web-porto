@@ -3,19 +3,21 @@ export type ProjectItem = {
   description: string;
   techStack: string[];
   externalUrl: string;
+  coverImages: string[];
+  labels: Array<"IoT" | "AI" | "Data">;
 };
 
 export const heroContent = {
-  headline: "IoT & AI Engineer",
+  headline: "Muhammad Rizkan Harin Faza",
   subtitle:
-    "Building resilient embedded systems, edge intelligence, and data-driven automation for real-world impact.",
-  ctaLabel: "Explore Projects",
+    "Building resilient technology for environmental monitoring and disaster mitigation.",
+  ctaLabel: "View Selected Work",
   ctaTarget: "#projects",
 };
 
 export const aboutContent = {
   summary:
-    "I design and ship practical engineering solutions across IoT devices, networked systems, and applied AI workflows. My focus is clean architecture, measurable outcomes, and maintainable implementation.",
+    "I design and build embedded intelligence for places where failure matters: coastlines, rivers, field stations, and distributed monitoring networks.",
 };
 
 export const projects: ProjectItem[] = [
@@ -25,20 +27,35 @@ export const projects: ProjectItem[] = [
       "Real-time sea level monitoring unit for tsunami early warning integration in high-risk coastal zones.",
     techStack: ["Embedded C", "Sensor Systems", "Telemetry"],
     externalUrl: "https://github.com/sihareen",
+    coverImages: ["/project-covers/pumma-utews.jpg", "/project-covers/buoy-utews.jpg"],
+    labels: ["IoT", "Data"],
   },
   {
-    title: "Dashboard Climate",
+    title: "Environmental Monitoring Systems",
     description:
-      "Web platform for climate station data visualization and environmental decision support.",
-    techStack: ["Laravel", "MySQL", "Charting"],
+      "Field monitoring and visualization systems for climate, microclimate, and environmental decision support.",
+    techStack: ["Sensors", "Dashboard", "Data Pipeline"],
     externalUrl: "https://github.com/sihareen",
+    coverImages: ["/project-covers/microclimate.jpg", "/project-covers/microclimate-dashboard.png"],
+    labels: ["IoT", "Data"],
   },
   {
-    title: "Rubus IOC",
+    title: "Flood Early Warning Systems",
     description:
-      "LoRa-based soil moisture monitoring with solar-powered field deployment for precision irrigation.",
-    techStack: ["LoRa", "IoT", "Power Systems"],
+      "River and rainfall monitoring architecture for community-scale disaster preparedness and alerting.",
+    techStack: ["LoRa", "IoT", "Telemetry"],
     externalUrl: "https://github.com/sihareen",
+    coverImages: ["/project-covers/ews-indomaker.jpg", "/project-covers/eddy-station.jpg"],
+    labels: ["IoT"],
+  },
+  {
+    title: "AI Classification Systems",
+    description:
+      "Applied machine learning systems for environmental and signal classification across edge and server workflows.",
+    techStack: ["Python", "TensorFlow", "Edge AI"],
+    externalUrl: "https://github.com/sihareen",
+    coverImages: ["/project-covers/ai-rtka.jpg", "/project-covers/ai-lemon.jpg"],
+    labels: ["AI", "Data"],
   },
 ];
 

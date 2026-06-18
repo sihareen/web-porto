@@ -17,18 +17,18 @@ const fallbackTimelineItems: TimelineItem[] = [
   {
     period: "2024 - Present",
     title: "IoT & AI Engineer",
-    company: "Industrial / Field Deployment",
+    company: "Field Deployment / Research Engineering",
     description:
-      "Developing connected sensing systems and analytics workflows for monitoring, automation, and decision support.",
-    tags: ["IoT", "Embedded", "AI"],
+      "Developing connected sensing systems, edge intelligence, and analytics workflows for environmental monitoring, automation, and disaster mitigation.",
+    tags: ["IoT", "Embedded", "Edge AI"],
     category: ExperienceCategory.EXPERIENCE,
   },
   {
     period: "2023 - 2024",
-    title: "Engineering Project Implementation",
-    company: "Applied Engineering Projects",
+    title: "Embedded Telemetry Implementation",
+    company: "Applied Engineering / Prototype to Field",
     description:
-      "Delivered field-oriented embedded and telemetry projects with end-to-end integration from hardware to dashboard.",
+      "Built field-oriented telemetry projects with end-to-end integration from sensors and firmware to dashboards, alerting, and deployment validation.",
     tags: ["Telemetry", "System Integration", "Deployment"],
     category: ExperienceCategory.EXPERIENCE,
   },

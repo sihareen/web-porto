@@ -1,72 +1,54 @@
-import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import Image from "next/image";
 
-import { contactContent } from "@/data/site-content";
+import { heroContent } from "@/data/site-content";
 
 export function HeroSection() {
   return (
-    <section id="hero" className="relative overflow-hidden border-b border-white/10">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(255,255,255,0.08),transparent_36%)]" />
-      <div className="mx-auto grid min-h-[calc(100vh-72px)] w-full max-w-[1320px] gap-12 px-6 py-14 sm:px-10 lg:grid-cols-[1.08fr_1fr] lg:items-center lg:px-12 lg:py-16">
-        <div className="z-10 flex max-w-[660px] flex-col items-start gap-6 lg:gap-7">
-          <p className="text-xs uppercase tracking-[0.28em] text-cyan-300">Portfolio</p>
-          <h1 className="font-[family-name:var(--font-heading)] text-5xl leading-[0.98] text-white sm:text-6xl lg:text-7xl xl:text-[6.25rem]">
-            <span className="block">Muhammad Rizkan</span>
-            <span className="block">Harin Faza</span>
+    <section id="hero" className="relative overflow-hidden border-b border-[var(--line)]">
+      <div className="mx-auto grid w-full max-w-[1320px] gap-12 px-5 py-12 sm:px-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:px-10 lg:py-16">
+        <div className="z-10 flex max-w-[650px] flex-col items-start">
+          <h1 className="font-[family-name:var(--font-heading)] text-[4.2rem] font-medium leading-[0.88] text-[var(--text)] sm:text-[5.8rem] lg:text-[6.8rem] xl:text-[7.8rem]">
+            {heroContent.headline}
           </h1>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">
-            IoT & Embedded Systems Engineer
+          <p className="mt-8 max-w-[560px] text-sm font-medium uppercase tracking-[0.18em] text-[var(--accent)]">
+            IoT Engineer / Embedded Systems Engineer / Research Engineer
           </p>
-          <p className="max-w-[560px] text-base leading-8 text-white/70 lg:text-lg">
-            Electrical Engineering graduate focused on intelligent connected systems, embedded technology, AI, and
-            data-driven solutions.
+          <p className="mt-5 max-w-[560px] text-xl leading-9 text-[var(--muted)]">
+            {heroContent.subtitle}
           </p>
-          <div className="flex flex-wrap items-center gap-5">
+          <div className="mt-9 flex flex-wrap items-center gap-4">
             <a
-              href="#projects"
-              className="inline-flex items-center rounded-md border border-cyan-300/40 bg-cyan-400/10 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200 transition hover:-translate-y-0.5 hover:border-cyan-300"
+              href={heroContent.ctaTarget}
+              className="inline-flex items-center border border-[var(--text)] bg-[var(--text)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--surface)] transition duration-200 hover:-translate-y-0.5 hover:bg-[var(--accent)]"
             >
-              View Portfolio
+              {heroContent.ctaLabel}
             </a>
             <a
               href="/cv.pdf"
               download
-              className="inline-flex items-center rounded-md border border-white/20 px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/85 transition hover:-translate-y-0.5 hover:border-cyan-300 hover:text-cyan-300"
+              className="inline-flex items-center border border-[var(--line)] px-6 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-[var(--text)] transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)]"
             >
               Download CV
             </a>
           </div>
         </div>
 
-        <div className="relative mx-auto flex w-full max-w-[620px] flex-col items-center justify-center gap-6">
-          {/* <p className="text-[11px] uppercase tracking-[0.24em] text-cyan-300">Contact</p> */}
-          <div className="flex items-center justify-center gap-5">
-            <a
-              href={`mailto:${contactContent.email}`}
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="Email"
-            >
-              <FiMail className="h-5 w-5" />
-            </a>
-            <a
-              href={contactContent.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="LinkedIn"
-            >
-              <FiLinkedin className="h-5 w-5" />
-            </a>
-            <a
-              href={contactContent.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:-translate-y-0.5 hover:border-cyan-300/45 hover:text-cyan-300"
-              aria-label="GitHub"
-            >
-              <FiGithub className="h-5 w-5" />
-            </a>
+        <figure className="relative">
+          <div className="relative aspect-[4/5] max-h-[640px] overflow-hidden bg-[var(--image-wash)] lg:aspect-[5/6]">
+            <Image
+              src="/project-covers/buoy-utews.jpg"
+              alt="Field-deployed monitoring buoy and instrumentation"
+              fill
+              priority
+              className="object-cover transition duration-700 hover:scale-[1.015]"
+              sizes="(max-width: 1024px) 100vw, 55vw"
+            />
           </div>
-        </div>
+          <figcaption className="mt-4 flex items-start justify-between gap-4 border-t border-[var(--line)] pt-3 text-xs leading-5 text-[var(--muted)]">
+            <span>Field deployment, environmental telemetry system.</span>
+            <span className="uppercase tracking-[0.18em] text-[var(--accent)]">Disaster resilience</span>
+          </figcaption>
+        </figure>
       </div>
     </section>
   );

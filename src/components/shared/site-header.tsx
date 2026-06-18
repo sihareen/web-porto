@@ -3,11 +3,10 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { label: "Home", href: "#hero", id: "hero" },
-  { label: "About", href: "#about", id: "about" },
-  { label: "Skills", href: "#skills", id: "skills" },
-  { label: "Projects", href: "#projects", id: "projects" },
-  { label: "Contact", href: "#contact", id: "contact" },
+  { label: "Work", shortLabel: "Work", href: "#projects", id: "projects" },
+  { label: "Field Notes", shortLabel: "Field", href: "#field-notes", id: "field-notes" },
+  { label: "Experience", shortLabel: "Story", href: "#experience", id: "experience" },
+  { label: "Contact", shortLabel: "Contact", href: "#contact", id: "contact" },
 ];
 
 export function SiteHeader() {
@@ -43,25 +42,27 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-black/70 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between px-6 py-4 sm:px-10 lg:px-12">
+    <header className="sticky top-0 z-40 border-b border-[var(--line)]/70 bg-[var(--bg)]/88 backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1320px] items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
         <a
           href="#hero"
-          className="font-[family-name:var(--font-heading)] text-xs uppercase tracking-[0.35em] text-white"
+          className="min-w-24 font-[family-name:var(--font-heading)] text-xl font-semibold leading-none text-[var(--text)] sm:min-w-0"
         >
-          Hspace
+          <span className="sm:hidden">MRHF</span>
+          <span className="hidden sm:inline">Muhammad Rizkan Harin Faza</span>
         </a>
-        <nav aria-label="Primary" className="overflow-x-auto">
-          <ul className="flex min-w-max items-center gap-4 lg:gap-7">
+        <nav aria-label="Primary" className="overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="flex min-w-max items-center gap-4 lg:gap-8">
             {navItems.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
-                  className={`text-[11px] uppercase tracking-[0.2em] transition ${
-                    item.id === activeSection ? "text-cyan-300" : "text-white/75 hover:text-cyan-300"
+                  className={`text-[11px] uppercase tracking-[0.18em] transition ${
+                    item.id === activeSection ? "text-[var(--accent)]" : "text-[var(--muted)] hover:text-[var(--text)]"
                   }`}
                 >
-                  {item.label}
+                  <span className="sm:hidden">{item.shortLabel}</span>
+                  <span className="hidden sm:inline">{item.label}</span>
                 </a>
               </li>
             ))}

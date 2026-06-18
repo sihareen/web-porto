@@ -69,12 +69,16 @@ export async function ProjectsSection() {
         })
       : projects.map((project) => ({
           ...project,
-          coverImages: [],
-          labels: [inferProjectCategory(project.title, project.techStack)],
+          coverImages: project.coverImages,
+          labels: project.labels.length > 0 ? project.labels : [inferProjectCategory(project.title, project.techStack)],
         }));
 
   return (
-    <SectionShell id="projects" title="Featured Projects">
+    <SectionShell
+      id="projects"
+      title="Selected Work"
+      intro="Photography-first case studies across disaster early warning, environmental monitoring, telemetry, and applied AI."
+    >
       <ProjectsGallery projects={displayProjects} />
     </SectionShell>
   );
