@@ -6,16 +6,15 @@ export function AboutSection() {
   return (
     <SectionShell id="about" sectionNumber="05" title="About">
       <div className="mx-auto grid max-w-[1100px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-16">
-        <div className="relative overflow-hidden border border-[var(--border)] bg-[var(--surface)]">
-          <div className="aspect-[3/4]">
-            <Image
-              src="/profile/me.jpg"
-              alt="Muhammad Rizkan Harin Faza"
-              width={900}
-              height={1200}
-              className="h-full w-full object-cover object-center"
-            />
-          </div>
+        <div className="relative h-[500px] overflow-hidden border border-[var(--border)] bg-[var(--surface)] lg:h-[600px]">
+          <Image
+            src="/profile/me.jpg"
+            alt="Muhammad Rizkan Harin Faza"
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 1024px) 100vw, 600px"
+            priority
+          />
         </div>
 
         <div className="flex flex-col justify-center space-y-8">

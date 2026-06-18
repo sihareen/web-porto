@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FiX } from "react-icons/fi";
+import { FiBookOpen, FiBriefcase } from "react-icons/fi";
 
 type ExperienceCardItem = {
   period: string;
@@ -16,137 +15,154 @@ type ExperienceGalleryProps = {
   items: ExperienceCardItem[];
 };
 
-type Phase = {
-  label: string;
-  color: string;
-};
-
-function determinePhase(period: string, category: string): Phase {
-  if (period.includes("2025") || period.includes("2026")) {
-    return { label: "DEPLOYMENT & INTEGRATION", color: "var(--accent)" };
-  }
-  if (period.includes("2023") || period.includes("2024")) {
-    if (category === "EDUCATION") {
-      return { label: "ARTIFICIAL INTELLIGENCE", color: "var(--accent)" };
-    }
-    return { label: "SYSTEMS DEVELOPMENT", color: "var(--accent)" };
-  }
-  if (category === "EDUCATION") {
-    return { label: "FOUNDATION", color: "var(--accent)" };
-  }
-  return { label: "EARLY DEVELOPMENT", color: "var(--accent)" };
-}
-
 export function ExperienceGallery({ items }: ExperienceGalleryProps) {
-  const [activeItem, setActiveItem] = useState<ExperienceCardItem | null>(null);
-
-  useEffect(() => {
-    if (!activeItem) {
-      return;
-    }
-
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setActiveItem(null);
-      }
-    }
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [activeItem]);
+  // Create rows of 4 items with alternating direction
+  const rows: ExperienceCardItem[][] = [];
+  for (let i = 0; i < items.length; i += 4) {
+    const row = items.slice(i, i + 4);
+    rows.push(row);
+  }
 
   return (
-    <>
-      <div className="space-y-16">
-        {items.map((item, index) => {
-          const phase = determinePhase(item.period, item.category);
-          
-          return (
-            <article
-              key={`${item.period}-${item.title}`}
-              role="button"
-              tabIndex={0}
-              onClick={() => setActiveItem(item)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setActiveItem(item);
-                }
-              }}
-              className="group cursor-pointer"
-              style={{
-                animation: `slide-up-stagger 420ms cubic-bezier(0.4, 0, 0.2, 1) ${index * 80}ms backwards`
-              }}
-            >
-              <div className="flex items-center gap-6 mb-6">
-                <span className="text-sm font-semibold tabular-nums text-[var(--accent)]">
-                  {item.period}
-                </span>
-                <div className="flex items-center gap-4">
-                  <div className="h-2.5 w-2.5 bg-[var(--accent)]" />
-                  <div className="h-px flex-1 w-32 bg-[var(--border)]" />
-                </div>
+    <div className="space-y-8">
+      {rows.map((row, rowIndex) => {
+        const isReverse = rowIndex % 2 === 1;
+        const displayRow = isReverse ? [...row].reverse() : row;
+        const startIndex = rowIndex * 4;
+
+        return (
+          <div key={rowIndex}>
+            {/* Desktop: Snake pattern */}
+            <div className="hidden md:block">
+              <div className="grid grid-cols-4 gap-6">
+                {displayRow.map((item, colIndex) => {
+                  const actualIndex = isReverse ? startIndex + (3 - colIndex) : startIndex + colIndex;
+                  const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+
+                  return (
+                    <div key={actualIndex} className="relative">
+                      {/* Card */}
+                      <article className="group h-full border border-[var(--border)] bg-[var(--surface)] p-5 transition-all duration-240 hover:border-[var(--accent)] hover:shadow-sm">
+                        {/* Milestone Number */}
+                        <div className="mb-3 flex items-center justify-between">
+                          <span className="text-xl font-bold font-mono text-[var(--accent)]">
+                            {milestoneNumber}
+                          </span>
+                          {item.category === "EDUCATION" ? (
+                            <FiBookOpen className="h-4 w-4 text-[var(--secondary)]" />
+                          ) : (
+                            <FiBriefcase className="h-4 w-4 text-[var(--secondary)]" />
+                          )}
+                        </div>
+
+                        {/* Period */}
+                        <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] mb-2">
+                          {item.period}
+                        </p>
+
+                        {/* Title */}
+                        <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-1 line-clamp-2">
+                          {item.title}
+                        </h3>
+
+                        {/* Company */}
+                        {item.company && (
+                          <p className="text-xs font-medium text-[var(--secondary)] mb-2 line-clamp-1">
+                            {item.company}
+                          </p>
+                        )}
+
+                        {/* Description */}
+                        <p className="text-xs leading-[1.5] text-[var(--text-secondary)] line-clamp-2 mb-3">
+                          {item.description}
+                        </p>
+
+                        {/* Tags */}
+                        <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent)] line-clamp-1">
+                          {item.tags.slice(0, 2).join(" · ")}
+                        </p>
+                      </article>
+
+                      {/* Connector Line (except last in row) */}
+                      {colIndex < displayRow.length - 1 && (
+                        <div className="absolute top-1/2 -right-3 w-6 h-px bg-[var(--accent)] opacity-40" />
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-              
-              <div className="pl-0 sm:pl-16">
-                <div className="mb-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--accent)] opacity-80">
-                    {phase.label}
-                  </p>
+
+              {/* Vertical Connector between rows */}
+              {rowIndex < rows.length - 1 && (
+                <div className="flex justify-end my-4">
+                  <div className={`w-px h-8 bg-[var(--accent)] opacity-40 ${isReverse ? 'mr-auto' : 'ml-auto'}`} />
                 </div>
-                
-                <div className="engineering-card p-8 transition-transform duration-240 hover:translate-x-1">
-                  <h3 className="text-2xl font-bold text-[var(--primary)] uppercase tracking-tight">{item.title}</h3>
-                  {item.company && (
-                    <p className="mt-2 text-base font-medium text-[var(--secondary)]">{item.company}</p>
-                  )}
-                  <p className="mt-5 text-base leading-[1.6] text-[var(--text-secondary)]">{item.description}</p>
-                  
-                  <div className="mt-6">
-                    <p className="text-xs font-mono uppercase tracking-wider text-[var(--accent)]">
-                      {item.tags.join(" · ")}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-
-      {activeItem ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/97 px-4 py-8 backdrop-blur-xl sm:px-6">
-          <button type="button" className="absolute inset-0" aria-label="Close popup" onClick={() => setActiveItem(null)} />
-
-          <article className="relative z-10 w-full max-w-2xl rounded-sm border border-[var(--border)] bg-white p-10 shadow-[0_24px_80px_rgba(29,29,29,0.25)] sm:p-12">
-            <button
-              type="button"
-              onClick={() => setActiveItem(null)}
-              className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:border-[var(--text-primary)]"
-              aria-label="Close details"
-            >
-              <FiX />
-            </button>
-
-            <p className="text-sm font-semibold tabular-nums text-[var(--accent)]">{activeItem.period}</p>
-            <p className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              {determinePhase(activeItem.period, activeItem.category).label}
-            </p>
-            
-            <h3 className="mt-4 text-3xl font-semibold text-[var(--text-primary)]">{activeItem.title}</h3>
-            {activeItem.company && (
-              <p className="mt-2 text-lg text-[var(--text-secondary)]">{activeItem.company}</p>
-            )}
-            <p className="mt-6 text-base leading-[1.8] text-[var(--text-secondary)]">{activeItem.description}</p>
-
-            <div className="mt-6">
-              <p className="text-sm text-[var(--text-secondary)]">
-                {activeItem.tags.join(" · ")}
-              </p>
+              )}
             </div>
-          </article>
-        </div>
-      ) : null}
-    </>
+
+            {/* Mobile: Vertical roadmap */}
+            <div className="md:hidden space-y-4">
+              {row.map((item, colIndex) => {
+                const actualIndex = startIndex + colIndex;
+                const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+
+                return (
+                  <div key={actualIndex} className="relative">
+                    {/* Card */}
+                    <article className="border border-[var(--border)] bg-[var(--surface)] p-5">
+                      {/* Milestone Number */}
+                      <div className="mb-3 flex items-center justify-between">
+                        <span className="text-xl font-bold font-mono text-[var(--accent)]">
+                          {milestoneNumber}
+                        </span>
+                        {item.category === "EDUCATION" ? (
+                          <FiBookOpen className="h-4 w-4 text-[var(--secondary)]" />
+                        ) : (
+                          <FiBriefcase className="h-4 w-4 text-[var(--secondary)]" />
+                        )}
+                      </div>
+
+                      {/* Period */}
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--accent)] mb-2">
+                        {item.period}
+                      </p>
+
+                      {/* Title */}
+                      <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-1">
+                        {item.title}
+                      </h3>
+
+                      {/* Company */}
+                      {item.company && (
+                        <p className="text-xs font-medium text-[var(--secondary)] mb-2">
+                          {item.company}
+                        </p>
+                      )}
+
+                      {/* Description */}
+                      <p className="text-xs leading-[1.5] text-[var(--text-secondary)] mb-3">
+                        {item.description}
+                      </p>
+
+                      {/* Tags */}
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent)]">
+                        {item.tags.slice(0, 2).join(" · ")}
+                      </p>
+                    </article>
+
+                    {/* Vertical Connector (except last item) */}
+                    {!(rowIndex === rows.length - 1 && colIndex === row.length - 1) && (
+                      <div className="flex justify-center my-2">
+                        <div className="w-px h-4 bg-[var(--accent)] opacity-40" />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
 }

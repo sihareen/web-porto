@@ -42,7 +42,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   useEffect(() => {
     if (isHovered || isPaused) return;
 
-    const scrollSpeed = 0.3; // pixels per frame (very slow)
+    const scrollSpeed = 0.33; // pixels per frame (10% faster, still premium and subtle)
     let animationFrameId: number;
 
     const animate = () => {
