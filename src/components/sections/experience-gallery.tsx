@@ -83,27 +83,27 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                   {item.period}
                 </span>
                 <div className="flex items-center gap-4">
-                  <div className="h-2.5 w-2.5 rounded-full bg-[var(--accent)]" />
+                  <div className="h-2.5 w-2.5 bg-[var(--accent)]" />
                   <div className="h-px flex-1 w-32 bg-[var(--border)]" />
                 </div>
               </div>
               
               <div className="pl-0 sm:pl-16">
                 <div className="mb-4">
-                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-primary)] opacity-60">
+                  <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--accent)] opacity-80">
                     {phase.label}
                   </p>
                 </div>
                 
                 <div className="engineering-card p-8 transition-transform duration-240 hover:translate-x-1">
-                  <h3 className="text-2xl font-bold text-[var(--text-primary)] uppercase tracking-tight">{item.title}</h3>
+                  <h3 className="text-2xl font-bold text-[var(--primary)] uppercase tracking-tight">{item.title}</h3>
                   {item.company && (
-                    <p className="mt-2 text-base font-medium text-[var(--text-secondary)]">{item.company}</p>
+                    <p className="mt-2 text-base font-medium text-[var(--secondary)]">{item.company}</p>
                   )}
                   <p className="mt-5 text-base leading-[1.6] text-[var(--text-secondary)]">{item.description}</p>
                   
                   <div className="mt-6">
-                    <p className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+                    <p className="text-xs font-mono uppercase tracking-wider text-[var(--accent)]">
                       {item.tags.join(" · ")}
                     </p>
                   </div>

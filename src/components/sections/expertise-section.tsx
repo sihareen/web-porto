@@ -37,8 +37,8 @@ export function ExpertiseSection() {
             key={domain.category}
             className="engineering-card p-7"
           >
-            <h3 className="mb-4 text-xl font-bold uppercase tracking-tight text-[var(--text-primary)]">{domain.category}</h3>
-            <p className="text-sm font-mono leading-relaxed text-[var(--text-secondary)]">
+            <h3 className="mb-4 text-xl font-bold uppercase tracking-tight text-[var(--primary)]">{domain.category}</h3>
+            <p className="text-sm font-mono leading-relaxed text-[var(--accent)]">
               {domain.technologies.join(" · ")}
             </p>
           </div>

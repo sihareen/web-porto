@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F7F5F0;
-  --surface: #FCFBF8;
-  --text-primary: #1D1D1D;
-  --text-secondary: #6B6B6B;
-  --accent: #65705A;
-  --border: #E5E3DC;
-  --border-subtle: #F0EEE9;
-  --grid-color: rgba(29, 29, 29, 0.03);
+  --primary: #1F365C;
+  --accent: #2E5D9F;
+  --secondary: #4F6485;
+  --background: #EEF2F7;
+  --surface: #F7F9FC;
+  --grid-color: #D9E3F1;
+  --text-primary: #1F365C;
+  --text-secondary: #4F6485;
+  --border: #D9E3F1;
+  --border-subtle: #E8EEF5;
   --spacing-unit: 8px;
 }
 
@@ -45,7 +47,7 @@ body::before {
     linear-gradient(var(--grid-color) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
   background-size: 24px 24px;
-  opacity: 0.7;
+  opacity: 0.4;
   z-index: 0;
 }
 
@@ -59,9 +61,9 @@ main {
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.05em;
-  color: var(--text-primary);
+  color: var(--accent);
   font-variant-numeric: tabular-nums;
-  opacity: 0.5;
+  opacity: 0.8;
   font-family: var(--font-mono, monospace);
 }
 
@@ -88,7 +90,7 @@ main {
 }
 
 .engineering-card:hover {
-  border-color: var(--text-primary);
+  border-color: var(--accent);
   transform: translateY(-1px);
 }
 

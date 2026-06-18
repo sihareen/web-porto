@@ -6,16 +6,16 @@ export function HeroSection() {
           <div className="flex items-center justify-between">
             <span className="section-number text-base">01</span>
             <div className="h-px flex-1 bg-[var(--border)] mx-6" />
-            <span className="text-xs font-mono tracking-wider text-[var(--text-secondary)] uppercase">Systems Engineer</span>
+            <span className="text-xs font-mono tracking-wider text-[var(--accent)] uppercase">Systems Engineer</span>
           </div>
           
           <div className="space-y-12">
             <div className="space-y-6">
-              <h1 className="text-[clamp(2.75rem,8vw,5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--text-primary)] uppercase">
+              <h1 className="text-[clamp(2.75rem,8vw,5rem)] font-bold leading-[0.95] tracking-[-0.03em] text-[var(--primary)] uppercase">
                 MUHAMMAD RIZKAN<br />HARIN FAZA
               </h1>
               
-              <div className="flex flex-col gap-1 text-[clamp(1.125rem,2vw,1.375rem)] font-semibold leading-[1.3] text-[var(--text-secondary)]">
+              <div className="flex flex-col gap-1 text-[clamp(1.125rem,2vw,1.375rem)] font-semibold leading-[1.3] text-[var(--secondary)]">
                 <p>IoT Engineer</p>
                 <p>Embedded Systems Developer</p>
                 <p>AI Systems Builder</p>
@@ -31,14 +31,14 @@ export function HeroSection() {
             <div className="flex flex-wrap items-center gap-4 pt-6">
               <a
                 href="#projects"
-                className="inline-flex items-center bg-[var(--text-primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-[var(--surface)] transition-all duration-200 hover:opacity-90"
+                className="inline-flex items-center bg-[var(--primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-white transition-all duration-200 hover:bg-[var(--accent)]"
               >
                 View Projects
               </a>
               <a
                 href="/cv.pdf"
                 download
-                className="inline-flex items-center border-2 border-[var(--text-primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-[var(--text-primary)] transition-all duration-200 hover:bg-[var(--text-primary)] hover:text-[var(--surface)]"
+                className="inline-flex items-center border-2 border-[var(--primary)] px-8 py-4 text-sm font-bold uppercase tracking-wider text-[var(--primary)] transition-all duration-200 hover:bg-[var(--primary)] hover:text-white"
               >
                 Download CV
               </a>

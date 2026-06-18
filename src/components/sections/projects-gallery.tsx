@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight, FiExternalLink, FiGithub, FiX } from "react-icons/fi";
 
 export type ProjectCategory = "IoT" | "AI" | "Data";
@@ -19,25 +19,6 @@ type ProjectsGalleryProps = {
   projects: ProjectCardItem[];
 };
 
-type CapabilityDomain = "embedded" | "monitoring" | "ai";
-
-function categorizeProject(project: ProjectCardItem): CapabilityDomain {
-  const title = project.title.toLowerCase();
-  const desc = project.description.toLowerCase();
-  const tech = project.techStack.join(" ").toLowerCase();
-  const combined = `${title} ${desc} ${tech}`;
-
-  if (/voip|priscop|raspbot|sbc|vending|embedded/.test(combined)) {
-    return "embedded";
-  }
-  
-  if (/yolo|tensorflow|ai|classification|computer vision|machine learning/.test(combined)) {
-    return "ai";
-  }
-  
-  return "monitoring";
-}
-
 function isGitHubUrl(url: string) {
   return /github\.com/i.test(url);
 }
@@ -45,24 +26,33 @@ function isGitHubUrl(url: string) {
 export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
   const [activeProject, setActiveProject] = useState<ProjectCardItem | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-
-  const categorizedProjects = useMemo(() => {
-    const embedded: ProjectCardItem[] = [];
-    const monitoring: ProjectCardItem[] = [];
-    const ai: ProjectCardItem[] = [];
-
-    projects.forEach((project) => {
-      const category = categorizeProject(project);
-      if (category === "embedded") embedded.push(project);
-      else if (category === "ai") ai.push(project);
-      else monitoring.push(project);
-    });
-
-    return { embedded, monitoring, ai };
-  }, [projects]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const activeProjectImages = activeProject?.coverImages ?? [];
   const activeImage = activeProjectImages[activeImageIndex] ?? null;
+
+  // Calculate visible projects (4 on desktop, 2 on tablet, 1 on mobile)
+  const getVisibleCount = () => {
+    if (typeof window === 'undefined') return 4;
+    if (window.innerWidth >= 1024) return 4;
+    if (window.innerWidth >= 640) return 2;
+    return 1;
+  };
+
+  const [visibleCount, setVisibleCount] = useState(getVisibleCount());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setVisibleCount(getVisibleCount());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxIndex = Math.max(0, projects.length - visibleCount);
+  const canScrollLeft = carouselIndex > 0;
+  const canScrollRight = carouselIndex < maxIndex;
 
   useEffect(() => {
     if (!activeProject) {
@@ -111,9 +101,16 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
     setActiveImageIndex((prev) => (prev - 1 + activeProjectImages.length) % activeProjectImages.length);
   }
 
-  const ProjectCard = ({ project, featured = false }: { project: ProjectCardItem; featured?: boolean }) => {
+  function scrollCarouselLeft() {
+    setCarouselIndex((prev) => Math.max(0, prev - 1));
+  }
+
+  function scrollCarouselRight() {
+    setCarouselIndex((prev) => Math.min(maxIndex, prev + 1));
+  }
+
+  const ProjectCard = ({ project }: { project: ProjectCardItem }) => {
     const coverImage = project.coverImages[0] ?? null;
-    const cardHeight = featured ? "h-[600px]" : "h-[440px]";
 
     return (
       <article
@@ -126,16 +123,17 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
             openProject(project);
           }
         }}
-        className={`group cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-[280ms] hover:border-[var(--text-primary)] hover:shadow-none ${cardHeight}`}
+        className="group flex-shrink-0 cursor-pointer overflow-hidden border border-[var(--border)] bg-[var(--surface)] transition-all duration-240 hover:border-[var(--accent)] hover:shadow-lg"
+        style={{ width: `calc((100% - ${(visibleCount - 1) * 24}px) / ${visibleCount})` }}
       >
-        <div className={`relative overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)] ${featured ? "h-[65%]" : "h-[60%]"}`}>
+        <div className="relative h-[320px] overflow-hidden border-b border-[var(--border)] bg-[var(--border-subtle)]">
           {coverImage ? (
             <Image
               src={coverImage}
               alt={project.title}
               fill
-              className="object-cover transition-transform duration-[320ms] group-hover:scale-[1.02]"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-320 group-hover:scale-[1.03]"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center text-sm tracking-wide text-[var(--text-secondary)]">
@@ -144,16 +142,16 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
           )}
         </div>
 
-        <div className="flex h-[35%] flex-col justify-between p-7">
+        <div className="flex flex-col justify-between p-6 h-[180px]">
           <div>
-            <h3 className={`font-bold leading-tight text-[var(--text-primary)] uppercase ${featured ? "text-2xl tracking-tight" : "text-lg"}`}>
+            <h3 className="text-lg font-bold leading-tight text-[var(--primary)] uppercase line-clamp-2">
               {project.title}
             </h3>
-            <p className={`mt-3 leading-[1.5] text-[var(--text-secondary)] line-clamp-2 ${featured ? "text-base" : "text-sm"}`}>
+            <p className="mt-3 text-sm leading-[1.5] text-[var(--text-secondary)] line-clamp-2">
               {project.description}
             </p>
           </div>
-          <p className="mt-4 text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+          <p className="mt-4 text-xs font-mono uppercase tracking-wider text-[var(--accent)]">
             {project.techStack.slice(0, 3).join(" · ")}
           </p>
         </div>
@@ -163,85 +161,83 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
 
   return (
     <>
-      <div className="space-y-24">
-        {categorizedProjects.embedded.length > 0 && (
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
-                Embedded Systems & Edge Devices
-              </h3>
-              <div className="section-divider" />
-            </div>
-            
-            <div className="space-y-8">
-              {categorizedProjects.embedded[0] && (
-                <ProjectCard project={categorizedProjects.embedded[0]} featured />
-              )}
-              
-              {categorizedProjects.embedded.length > 1 && (
-                <div className="grid gap-8 md:grid-cols-2">
-                  {categorizedProjects.embedded.slice(1).map((project) => (
-                    <ProjectCard key={project.title} project={project} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+      <div className="space-y-8">
+        {/* Carousel Container */}
+        <div className="relative">
+          {/* Navigation Arrows */}
+          {canScrollLeft && (
+            <button
+              onClick={scrollCarouselLeft}
+              className="absolute left-0 top-1/2 z-10 -translate-y-1/2 -translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
+              aria-label="Previous projects"
+            >
+              <FiChevronLeft className="h-6 w-6" />
+            </button>
+          )}
+          
+          {canScrollRight && (
+            <button
+              onClick={scrollCarouselRight}
+              className="absolute right-0 top-1/2 z-10 -translate-y-1/2 translate-x-4 bg-[var(--primary)] p-3 text-white shadow-lg transition-all hover:bg-[var(--accent)]"
+              aria-label="Next projects"
+            >
+              <FiChevronRight className="h-6 w-6" />
+            </button>
+          )}
 
-        {categorizedProjects.monitoring.length > 0 && (
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
-                Intelligent Monitoring Systems
-              </h3>
-              <div className="section-divider" />
-            </div>
-            
-            <div className="grid gap-8 md:grid-cols-2">
-              {categorizedProjects.monitoring.map((project) => (
+          {/* Carousel Track */}
+          <div className="overflow-hidden">
+            <div
+              className="flex gap-6 transition-transform duration-400 ease-out"
+              style={{ transform: `translateX(-${carouselIndex * (100 / visibleCount + 2.4)}%)` }}
+            >
+              {projects.map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
           </div>
-        )}
+        </div>
 
-        {categorizedProjects.ai.length > 0 && (
-          <div className="space-y-10">
-            <div className="space-y-4">
-              <h3 className="text-sm font-bold uppercase tracking-[0.15em] text-[var(--text-primary)]">
-                Artificial Intelligence
-              </h3>
-              <div className="section-divider" />
-            </div>
-            
-            <div className="space-y-8">
-              {categorizedProjects.ai[0] && (
-                <ProjectCard project={categorizedProjects.ai[0]} featured />
-              )}
-              
-              {categorizedProjects.ai.length > 1 && (
-                <div className="grid gap-8 md:grid-cols-2">
-                  {categorizedProjects.ai.slice(1).map((project) => (
-                    <ProjectCard key={project.title} project={project} />
-                  ))}
-                </div>
-              )}
-            </div>
+        {/* View All Button */}
+        <div className="flex justify-center pt-4">
+          <a
+            href="#projects-all"
+            className="inline-flex items-center border-2 border-[var(--primary)] px-8 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--primary)] transition-all hover:bg-[var(--primary)] hover:text-white"
+          >
+            View All Projects
+          </a>
+        </div>
+
+        {/* Carousel Indicators */}
+        {projects.length > visibleCount && (
+          <div className="flex justify-center gap-2 pt-2">
+            {Array.from({ length: maxIndex + 1 }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCarouselIndex(index)}
+                className={`h-1.5 transition-all ${
+                  carouselIndex === index
+                    ? "w-8 bg-[var(--accent)]"
+                    : "w-1.5 bg-[var(--border)] hover:bg-[var(--secondary)]"
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         )}
       </div>
 
+      {/* Project Detail Modal */}
       {activeProject ? (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--background)]/97 px-4 py-8 backdrop-blur-xl sm:px-6">
           <button type="button" className="absolute inset-0" aria-label="Close popup" onClick={closeProject} />
 
-          <article className="relative z-10 grid w-full max-w-6xl overflow-hidden rounded-sm border border-[var(--border)] bg-white shadow-[0_24px_80px_rgba(29,29,29,0.25)] lg:grid-cols-[1.3fr_1fr]">
+          <article className="relative z-10 grid w-full max-w-6xl overflow-hidden border border-[var(--border)] bg-white shadow-2xl lg:grid-cols-[1.3fr_1fr]">
             <div className="relative min-h-[420px] border-b border-[var(--border)] bg-[var(--background)] lg:min-h-[640px] lg:border-b-0 lg:border-r">
               <button
                 type="button"
                 onClick={closeProject}
-                className="absolute right-5 top-5 z-20 inline-flex h-10 w-10 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:border-[var(--text-primary)]"
+                className="absolute right-5 top-5 z-20 inline-flex h-10 w-10 items-center justify-center border border-[var(--border)] bg-white text-[var(--primary)] shadow-sm transition-all duration-240 hover:border-[var(--primary)]"
                 aria-label="Close project popup"
               >
                 <FiX />
@@ -262,7 +258,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
                       <button
                         type="button"
                         onClick={prevImage}
-                        className="absolute left-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:bg-[var(--text-primary)] hover:text-white"
+                        className="absolute left-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[var(--border)] bg-white text-[var(--primary)] shadow-sm transition-all duration-240 hover:bg-[var(--primary)] hover:text-white"
                         aria-label="Previous image"
                       >
                         <FiChevronLeft />
@@ -270,19 +266,19 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
                       <button
                         type="button"
                         onClick={nextImage}
-                        className="absolute right-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-sm border border-[var(--border)] bg-white text-[var(--text-primary)] shadow-sm transition-all duration-280 hover:bg-[var(--text-primary)] hover:text-white"
+                        className="absolute right-4 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-[var(--border)] bg-white text-[var(--primary)] shadow-sm transition-all duration-240 hover:bg-[var(--primary)] hover:text-white"
                         aria-label="Next image"
                       >
                         <FiChevronRight />
                       </button>
                       
-                      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 rounded-sm border border-[var(--border)] bg-white px-4 py-2 shadow-sm">
+                      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2 border border-[var(--border)] bg-white px-4 py-2 shadow-sm">
                         {activeProjectImages.map((_, index) => (
                           <button
                             type="button"
                             key={`${activeProject.title}-dot-${index}`}
                             onClick={() => setActiveImageIndex(index)}
-                            className={`h-2 w-2 rounded-full transition-all ${
+                            className={`h-2 w-2 transition-all ${
                               activeImageIndex === index ? "w-6 bg-[var(--accent)]" : "bg-[var(--border)]"
                             }`}
                             aria-label={`Show image ${index + 1}`}
@@ -300,10 +296,10 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
             </div>
 
             <div className="p-12 sm:p-14">
-              <h3 className="text-3xl font-semibold text-[var(--text-primary)]">{activeProject.title}</h3>
+              <h3 className="text-3xl font-bold uppercase text-[var(--primary)]">{activeProject.title}</h3>
               <p className="mt-6 text-base leading-[1.8] text-[var(--text-secondary)]">{activeProject.description}</p>
 
-              <p className="mt-6 text-sm leading-relaxed text-[var(--text-secondary)]">
+              <p className="mt-6 text-sm font-mono leading-relaxed text-[var(--accent)]">
                 {activeProject.techStack.join(" · ")}
               </p>
 
@@ -311,7 +307,7 @@ export function ProjectsGallery({ projects }: ProjectsGalleryProps) {
                 href={activeProject.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-8 inline-flex items-center gap-2 rounded-sm bg-[var(--text-primary)] px-7 py-3.5 text-sm font-medium text-white transition-all duration-280 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(29,29,29,0.2)]"
+                className="mt-8 inline-flex items-center gap-2 bg-[var(--primary)] px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all duration-240 hover:bg-[var(--accent)]"
               >
                 {isGitHubUrl(activeProject.externalUrl) ? <FiGithub aria-hidden /> : <FiExternalLink aria-hidden />}
                 View Project

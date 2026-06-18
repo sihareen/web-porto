@@ -6,7 +6,7 @@ export function AboutSection() {
   return (
     <SectionShell id="about" sectionNumber="05" title="About">
       <div className="mx-auto grid max-w-[1100px] gap-12 lg:grid-cols-[0.6fr_1.4fr] lg:gap-16">
-        <div className="relative overflow-hidden rounded-sm border border-[var(--border)] bg-[var(--surface)] shadow-[0_8px_32px_rgba(29,29,29,0.08)]">
+        <div className="relative overflow-hidden border border-[var(--border)] bg-[var(--surface)]">
           <div className="aspect-[3/4]">
             <Image
               src="/profile/me.jpg"
@@ -31,11 +31,11 @@ export function AboutSection() {
             </p>
           </div>
 
-          <div className="rounded-sm border-l-[3px] border-l-[var(--accent)] bg-[var(--surface)] p-6">
-            <p className="text-base font-medium text-[var(--text-primary)]">
+          <div className="border-l-[3px] border-l-[var(--accent)] bg-[var(--surface)] p-6">
+            <p className="text-base font-bold text-[var(--primary)]">
               Open to collaboration on intelligent systems projects
             </p>
-            <p className="mt-2 text-base leading-[1.7] text-[var(--text-secondary)]">
+            <p className="mt-2 text-base leading-[1.7] text-[var(--secondary)]">
               IoT architecture · Embedded development · Edge AI · System integration
             </p>
           </div>
