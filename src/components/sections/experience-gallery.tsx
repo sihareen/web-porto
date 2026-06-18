@@ -1,6 +1,6 @@
 "use client";
 
-import { FiBookOpen, FiBriefcase } from "react-icons/fi";
+import { FiArrowDown, FiArrowLeft, FiArrowRight, FiBookOpen, FiBriefcase } from "react-icons/fi";
 
 type ExperienceCardItem = {
   period: string;
@@ -24,7 +24,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-1">
       {rows.map((row, rowIndex) => {
         const isReverse = rowIndex % 2 === 1;
         const displayRow = isReverse ? [...row].reverse() : row;
@@ -32,26 +32,28 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
 
         return (
           <div key={rowIndex}>
-            {/* Desktop: Snake pattern */}
+            {/* Desktop: Blueprint Roadmap */}
             <div className="hidden md:block">
-              <div className="grid grid-cols-4 gap-6">
+              <div className="relative grid grid-cols-4 gap-4">
                 {displayRow.map((item, colIndex) => {
                   const actualIndex = isReverse ? startIndex + (3 - colIndex) : startIndex + colIndex;
                   const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+                  const isLastInRow = colIndex === displayRow.length - 1;
+                  const isFirstInRow = colIndex === 0;
 
                   return (
                     <div key={actualIndex} className="relative">
                       {/* Card */}
-                      <article className="group h-full border border-[var(--border)] bg-[var(--surface)] p-5 transition-all duration-240 hover:border-[var(--accent)] hover:shadow-sm">
-                        {/* Milestone Number */}
-                        <div className="mb-3 flex items-center justify-between">
-                          <span className="text-xl font-bold font-mono text-[var(--accent)]">
+                      <article className="group border-2 border-[var(--border)] bg-[var(--surface)] p-4 transition-all duration-240 hover:border-[var(--accent)]">
+                        {/* Milestone Number & Icon */}
+                        <div className="mb-2 flex items-center justify-between">
+                          <span className="text-2xl font-bold font-mono text-[var(--accent)]">
                             {milestoneNumber}
                           </span>
                           {item.category === "EDUCATION" ? (
-                            <FiBookOpen className="h-4 w-4 text-[var(--secondary)]" />
+                            <FiBookOpen className="h-5 w-5 text-[var(--accent)]" />
                           ) : (
-                            <FiBriefcase className="h-4 w-4 text-[var(--secondary)]" />
+                            <FiBriefcase className="h-5 w-5 text-[var(--accent)]" />
                           )}
                         </div>
 
@@ -61,64 +63,81 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                         </p>
 
                         {/* Title */}
-                        <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-1 line-clamp-2">
+                        <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-1">
                           {item.title}
                         </h3>
 
                         {/* Company */}
                         {item.company && (
-                          <p className="text-xs font-medium text-[var(--secondary)] mb-2 line-clamp-1">
+                          <p className="text-xs font-medium text-[var(--secondary)] mb-2">
                             {item.company}
                           </p>
                         )}
 
                         {/* Description */}
-                        <p className="text-xs leading-[1.5] text-[var(--text-secondary)] line-clamp-2 mb-3">
+                        <p className="text-xs leading-[1.4] text-[var(--text-secondary)] mb-2 line-clamp-2">
                           {item.description}
                         </p>
 
                         {/* Tags */}
-                        <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent)] line-clamp-1">
+                        <p className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent)]">
                           {item.tags.slice(0, 2).join(" · ")}
                         </p>
                       </article>
 
-                      {/* Connector Line (except last in row) */}
-                      {colIndex < displayRow.length - 1 && (
-                        <div className="absolute top-1/2 -right-3 w-6 h-px bg-[var(--accent)] opacity-40" />
+                      {/* Horizontal Connector Arrow (except last in row) */}
+                      {!isLastInRow && (
+                        <div className="absolute top-1/2 -right-2 z-10 flex items-center -translate-y-1/2">
+                          <div className="w-8 h-0.5 bg-[var(--accent)]" />
+                          {isReverse ? (
+                            <FiArrowLeft className="h-5 w-5 text-[var(--accent)] -ml-1" />
+                          ) : (
+                            <FiArrowRight className="h-5 w-5 text-[var(--accent)] -ml-1" />
+                          )}
+                        </div>
+                      )}
+
+                      {/* Vertical Connector Arrow (at end of row, going to next row) */}
+                      {isLastInRow && rowIndex < rows.length - 1 && (
+                        <div className="absolute -bottom-2 left-1/2 z-10 flex flex-col items-center -translate-x-1/2">
+                          <div className="w-0.5 h-8 bg-[var(--accent)]" />
+                          <FiArrowDown className="h-5 w-5 text-[var(--accent)] -mt-1" />
+                        </div>
+                      )}
+
+                      {/* Vertical Connector Arrow (at start of reverse row, coming from previous) */}
+                      {isReverse && isFirstInRow && rowIndex > 0 && (
+                        <div className="absolute -top-2 left-1/2 z-10 flex flex-col items-center -translate-x-1/2">
+                          <FiArrowDown className="h-5 w-5 text-[var(--accent)] mb-1" />
+                          <div className="w-0.5 h-8 bg-[var(--accent)]" />
+                        </div>
                       )}
                     </div>
                   );
                 })}
               </div>
-
-              {/* Vertical Connector between rows */}
-              {rowIndex < rows.length - 1 && (
-                <div className="flex justify-end my-4">
-                  <div className={`w-px h-8 bg-[var(--accent)] opacity-40 ${isReverse ? 'mr-auto' : 'ml-auto'}`} />
-                </div>
-              )}
             </div>
 
             {/* Mobile: Vertical roadmap */}
-            <div className="md:hidden space-y-4">
+            <div className="md:hidden space-y-2">
               {row.map((item, colIndex) => {
                 const actualIndex = startIndex + colIndex;
                 const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+                const isLast = rowIndex === rows.length - 1 && colIndex === row.length - 1;
 
                 return (
                   <div key={actualIndex} className="relative">
                     {/* Card */}
-                    <article className="border border-[var(--border)] bg-[var(--surface)] p-5">
-                      {/* Milestone Number */}
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xl font-bold font-mono text-[var(--accent)]">
+                    <article className="border-2 border-[var(--border)] bg-[var(--surface)] p-4">
+                      {/* Milestone Number & Icon */}
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="text-2xl font-bold font-mono text-[var(--accent)]">
                           {milestoneNumber}
                         </span>
                         {item.category === "EDUCATION" ? (
-                          <FiBookOpen className="h-4 w-4 text-[var(--secondary)]" />
+                          <FiBookOpen className="h-5 w-5 text-[var(--accent)]" />
                         ) : (
-                          <FiBriefcase className="h-4 w-4 text-[var(--secondary)]" />
+                          <FiBriefcase className="h-5 w-5 text-[var(--accent)]" />
                         )}
                       </div>
 
@@ -140,7 +159,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                       )}
 
                       {/* Description */}
-                      <p className="text-xs leading-[1.5] text-[var(--text-secondary)] mb-3">
+                      <p className="text-xs leading-[1.4] text-[var(--text-secondary)] mb-2">
                         {item.description}
                       </p>
 
@@ -150,10 +169,13 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                       </p>
                     </article>
 
-                    {/* Vertical Connector (except last item) */}
-                    {!(rowIndex === rows.length - 1 && colIndex === row.length - 1) && (
+                    {/* Vertical Connector Arrow (except last item) */}
+                    {!isLast && (
                       <div className="flex justify-center my-2">
-                        <div className="w-px h-4 bg-[var(--accent)] opacity-40" />
+                        <div className="flex flex-col items-center">
+                          <div className="w-0.5 h-6 bg-[var(--accent)]" />
+                          <FiArrowDown className="h-4 w-4 text-[var(--accent)] -mt-1" />
+                        </div>
                       </div>
                     )}
                   </div>
