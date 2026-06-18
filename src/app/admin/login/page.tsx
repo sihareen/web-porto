@@ -17,42 +17,44 @@ export default async function AdminLoginPage({ searchParams }: LoginPageProps) {
   const showError = params.error === "invalid_credentials" || params.error === "invalid_input";
 
   return (
-    <main className="mx-auto flex min-h-[75vh] w-full max-w-md items-center px-6 py-16">
-      <div className="w-full rounded-2xl border border-cyan-300/20 bg-slate-900/75 p-6">
-        <h1 className="font-[family-name:var(--font-heading)] text-2xl text-slate-100">Admin Login</h1>
-        <p className="mt-2 text-sm text-slate-300">Use your admin credential to manage projects.</p>
+    <main className="mx-auto flex min-h-screen w-full items-center justify-center bg-[var(--background)] px-6 py-16">
+      <div className="w-full max-w-md border border-[var(--border)] bg-[var(--surface)] p-8 shadow-sm">
+        <div className="mb-8 space-y-2">
+          <h1 className="text-2xl font-bold uppercase tracking-tight text-[var(--text-primary)]">Admin Panel</h1>
+          <p className="text-sm text-[var(--text-secondary)]">Masukkan kredensial untuk mengelola konten.</p>
+        </div>
 
         {showError ? (
-          <p className="mt-4 rounded-md border border-rose-400/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">
-            Login failed. Please check email and password.
-          </p>
+          <div className="mb-6 border border-rose-400/40 bg-rose-500/5 px-4 py-3 text-sm text-rose-700">
+            Login gagal. Periksa email dan password.
+          </div>
         ) : null}
 
-        <form action={loginAdminAction} className="mt-6 space-y-4">
-          <label className="block space-y-2 text-sm text-slate-200">
+        <form action={loginAdminAction} className="space-y-5">
+          <label className="block space-y-2 text-sm font-medium text-[var(--text-primary)]">
             Email
             <input
               name="email"
               type="email"
               required
-              className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+              className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
             />
           </label>
 
-          <label className="block space-y-2 text-sm text-slate-200">
+          <label className="block space-y-2 text-sm font-medium text-[var(--text-primary)]">
             Password
             <input
               name="password"
               type="password"
               required
               minLength={8}
-              className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+              className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
             />
           </label>
 
           <button
             type="submit"
-            className="w-full rounded-lg border border-cyan-300/50 bg-cyan-300/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-100 hover:bg-cyan-300/20"
+            className="w-full bg-[var(--text-primary)] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90"
           >
             Sign In
           </button>

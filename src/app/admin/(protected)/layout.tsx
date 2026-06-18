@@ -9,36 +9,50 @@ export default async function ProtectedAdminLayout({ children }: { children: Rea
   const session = await requireAdminSession();
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-10 sm:px-10">
-      <header className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-cyan-300/15 bg-slate-900/70 p-4">
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-cyan-200">Admin Panel</p>
-          <p className="text-sm text-slate-300">Signed in as {session.email}</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <a
-            href="/admin/projects"
-            className="rounded-md border border-cyan-300/20 px-3 py-2 text-xs uppercase tracking-[0.14em] text-slate-200"
-          >
-            Projects
-          </a>
-          <a
-            href="/admin/experiences"
-            className="rounded-md border border-cyan-300/20 px-3 py-2 text-xs uppercase tracking-[0.14em] text-slate-200"
-          >
-            Experience
-          </a>
-          <form action={logoutAdminAction}>
-            <button
-              type="submit"
-              className="rounded-md border border-cyan-300/50 bg-cyan-300/10 px-3 py-2 text-xs uppercase tracking-[0.14em] text-cyan-100"
+    <div className="min-h-screen bg-[var(--background)]">
+      <header className="border-b border-[var(--border)] bg-[var(--surface)]">
+        <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4 sm:px-10 lg:px-12">
+          <div className="space-y-1">
+            <p className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--text-primary)] opacity-60">
+              Admin Panel
+            </p>
+            <p className="text-sm font-medium text-[var(--text-secondary)]">{session.email}</p>
+          </div>
+          <nav className="flex flex-wrap items-center gap-3">
+            <a
+              href="/admin/projects"
+              className="border border-[var(--border)] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] transition-colors hover:border-[var(--text-primary)]"
             >
-              Logout
-            </button>
-          </form>
+              Projects
+            </a>
+            <a
+              href="/admin/experiences"
+              className="border border-[var(--border)] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] transition-colors hover:border-[var(--text-primary)]"
+            >
+              Experience
+            </a>
+            <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-[var(--border)] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] transition-colors hover:border-[var(--text-primary)]"
+            >
+              View Site
+            </a>
+            <form action={logoutAdminAction}>
+              <button
+                type="submit"
+                className="bg-[var(--text-primary)] px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90"
+              >
+                Logout
+              </button>
+            </form>
+          </nav>
         </div>
       </header>
-      {children}
+      <main className="mx-auto w-full max-w-7xl px-6 py-8 sm:px-10 sm:py-12 lg:px-12">
+        {children}
+      </main>
     </div>
   );
 }

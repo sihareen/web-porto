@@ -16,44 +16,52 @@ export default async function AdminExperiencesPage() {
   }
 
   return (
-    <main className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="font-[family-name:var(--font-heading)] text-2xl text-slate-100">Manage Experience / Education</h1>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold uppercase tracking-tight text-[var(--text-primary)]">Manage Experience</h1>
         <a
           href="/admin/experiences/new"
-          className="rounded-md border border-cyan-300/50 bg-cyan-300/10 px-4 py-2 text-xs uppercase tracking-[0.15em] text-cyan-100"
+          className="inline-flex items-center justify-center bg-[var(--text-primary)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90"
         >
           Add Entry
         </a>
       </div>
 
+      <div className="h-px w-full bg-[var(--border)]" />
+
       <div className="space-y-3">
         {hasDbError ? (
-          <p className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-4 text-sm text-rose-200">
+          <div className="border border-rose-400/30 bg-rose-500/5 p-4 text-sm text-rose-700">
             Failed to load experience data. Check `DATABASE_URL`.
-          </p>
+          </div>
         ) : null}
 
         {entries.length === 0 ? (
-          <p className="rounded-xl border border-cyan-300/15 bg-slate-900/60 p-4 text-sm text-slate-300">
-            No entries yet. Add your first experience or education item.
-          </p>
+          <div className="border border-[var(--border)] bg-[var(--surface)] p-6 text-center">
+            <p className="text-sm text-[var(--text-secondary)]">No entries yet. Add your first experience or education item.</p>
+          </div>
         ) : (
           entries.map((entry) => (
             <article
               key={entry.id}
-              className="rounded-xl border border-cyan-300/15 bg-slate-900/70 p-4 md:flex md:items-center md:justify-between"
+              className="flex flex-col gap-4 border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--text-primary)] sm:flex-row sm:items-start sm:justify-between"
             >
-              <div>
-                <p className="text-xs uppercase tracking-[0.12em] text-cyan-200">{entry.category}</p>
-                <h2 className="mt-1 text-lg text-slate-100">{entry.title}</h2>
-                {entry.company ? <p className="mt-1 text-sm text-slate-300">{entry.company}</p> : null}
-                <p className="mt-1 text-sm text-slate-400">{entry.period}</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.12em] text-slate-500">Order: {entry.displayOrder}</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <span className="inline-block border border-[var(--border)] px-2 py-1 text-xs font-mono uppercase text-[var(--text-secondary)]">
+                    {entry.category}
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold text-[var(--text-primary)]">{entry.title}</h2>
+                {entry.company ? <p className="text-sm font-medium text-[var(--text-secondary)]">{entry.company}</p> : null}
+                <p className="text-sm text-[var(--text-secondary)]">{entry.period}</p>
+                <p className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+                  Order: {entry.displayOrder}
+                </p>
               </div>
               <a
                 href={`/admin/experiences/${entry.id}/edit`}
-                className="mt-3 inline-block rounded-md border border-cyan-300/30 px-3 py-2 text-xs uppercase tracking-[0.12em] text-cyan-200 md:mt-0"
+                className="inline-flex items-center justify-center border-2 border-[var(--text-primary)] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--surface)] sm:self-start"
               >
                 Edit
               </a>
@@ -61,6 +69,6 @@ export default async function AdminExperiencesPage() {
           ))
         )}
       </div>
-    </main>
+    </div>
   );
 }

@@ -18,25 +18,25 @@ type ExperienceFormProps = {
 
 export function ExperienceForm({ action, submitLabel, defaults }: ExperienceFormProps) {
   return (
-    <form action={action} className="space-y-5 rounded-2xl border border-cyan-300/15 bg-slate-900/70 p-6">
-      <div className="grid gap-5 md:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-200">
+    <form action={action} className="space-y-6 border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Period
           <input
             name="period"
             required
             defaultValue={defaults?.period}
             placeholder="2024 - Present"
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Type
           <select
             name="category"
             defaultValue={defaults?.category ?? ExperienceCategory.EXPERIENCE}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           >
             <option value={ExperienceCategory.EXPERIENCE}>Experience</option>
             <option value={ExperienceCategory.EDUCATION}>Education</option>
@@ -44,65 +44,65 @@ export function ExperienceForm({ action, submitLabel, defaults }: ExperienceForm
         </label>
       </div>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Title
         <input
           name="title"
           required
           defaultValue={defaults?.title}
           placeholder="IoT & AI Engineer"
-          className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
         />
       </label>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Company / Institution
         <input
           name="company"
           defaultValue={defaults?.company}
           placeholder="PT Example / University Name"
-          className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
         />
       </label>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Description
         <textarea
           name="description"
           rows={5}
           required
           defaultValue={defaults?.description}
-          className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
         />
       </label>
 
-      <div className="grid gap-5 md:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-200">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Tags (comma separated)
           <input
             name="tags"
             required
             defaultValue={defaults?.tags}
             placeholder="IoT, Embedded, AI"
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Display Order
           <input
             name="displayOrder"
             type="number"
             min={0}
             defaultValue={defaults?.displayOrder ?? 0}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
       </div>
 
       <button
         type="submit"
-        className="rounded-lg border border-cyan-300/50 bg-cyan-300/10 px-5 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-100 transition hover:bg-cyan-300/20"
+        className="w-full bg-[var(--text-primary)] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90 sm:w-auto"
       >
         {submitLabel}
       </button>

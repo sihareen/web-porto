@@ -24,49 +24,49 @@ const PROJECT_LABELS = ["IoT", "AI", "Data"] as const;
 
 export function ProjectForm({ action, submitLabel, coverFiles, defaults }: ProjectFormProps) {
   return (
-    <form action={action} className="space-y-5 rounded-2xl border border-cyan-300/15 bg-slate-900/70 p-6">
-      <div className="grid gap-5 md:grid-cols-2">
-        <label className="space-y-2 text-sm text-slate-200">
+    <form action={action} className="space-y-6 border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Title
           <input
             name="title"
             required
             defaultValue={defaults?.title}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           External URL
           <input
             name="externalUrl"
             type="url"
             required
             defaultValue={defaults?.externalUrl}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
       </div>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Description
         <textarea
           name="description"
           rows={5}
           required
           defaultValue={defaults?.description}
-          className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
         />
       </label>
 
-      <div className="grid gap-5 md:grid-cols-3">
-        <label className="space-y-2 text-sm text-slate-200">
+      <div className="grid gap-5 sm:grid-cols-3">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Labels
           <select
             name="projectLabels"
             multiple
             defaultValue={defaults?.projectLabels ?? []}
-            className="h-28 w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="h-28 w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           >
             {PROJECT_LABELS.map((label) => (
               <option key={label} value={label}>
@@ -74,22 +74,22 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
               </option>
             ))}
           </select>
-          <p className="text-xs text-slate-400">Pilih lebih dari satu label dengan Ctrl/Cmd + klik.</p>
+          <p className="text-xs text-[var(--text-secondary)]">Pilih lebih dari satu dengan Ctrl/Cmd + klik</p>
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200 md:col-span-2">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)] sm:col-span-2">
           Tech Stack (comma separated)
           <input
             name="techStack"
             required
             defaultValue={defaults?.techStack}
             placeholder="LoRa, MQTT, Node.js"
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200">
-          Order
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
+          Display Order
           <input
             name="displayOrder"
             type="number"
@@ -97,17 +97,17 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
             step={1}
             required
             defaultValue={defaults?.displayOrder ?? 0}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           />
-          <p className="text-xs text-slate-400">Semakin kecil, semakin atas di halaman utama.</p>
+          <p className="text-xs text-[var(--text-secondary)]">Semakin kecil, semakin atas</p>
         </label>
 
-        <label className="space-y-2 text-sm text-slate-200">
+        <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
           Status
           <select
             name="status"
             defaultValue={defaults?.status ?? ProjectStatus.DRAFT}
-            className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+            className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)]"
           >
             <option value={ProjectStatus.DRAFT}>Draft</option>
             <option value={ProjectStatus.PUBLISHED}>Published</option>
@@ -115,13 +115,15 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
         </label>
       </div>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <div className="h-px w-full bg-[var(--border)]" />
+
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Cover Image (thumbnail)
         <select
           name="coverImageFileName"
           defaultValue={defaults?.coverImageFileName ?? ""}
           disabled={coverFiles.length === 0}
-          className="w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)] disabled:opacity-50"
         >
           <option value="">Auto from gallery</option>
           {coverFiles.map((fileName) => (
@@ -132,14 +134,14 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
         </select>
       </label>
 
-      <label className="space-y-2 text-sm text-slate-200">
+      <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Gallery Images (popup slider)
         <select
           name="galleryImageFileNames"
           multiple
           defaultValue={defaults?.galleryImageFileNames ?? []}
           disabled={coverFiles.length === 0}
-          className="h-44 w-full rounded-lg border border-cyan-300/20 bg-slate-950 px-3 py-2 text-slate-100 outline-none ring-cyan-300/40 focus:ring"
+          className="h-44 w-full border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-[var(--text-primary)] outline-none transition-colors focus:border-[var(--text-primary)] disabled:opacity-50"
         >
           {coverFiles.map((fileName) => (
             <option key={fileName} value={fileName}>
@@ -147,12 +149,12 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
             </option>
           ))}
         </select>
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-[var(--text-secondary)]">
           Gunakan Ctrl/Cmd + klik untuk pilih banyak gambar. Cover akan dipakai dari field Cover Image atau gambar
           pertama gallery.
         </p>
         {coverFiles.length === 0 ? (
-          <p className="text-xs text-amber-200">
+          <p className="text-xs text-amber-700">
             Belum ada file gambar. Tambahkan file ke `public/project-covers` lalu refresh halaman.
           </p>
         ) : null}
@@ -162,7 +164,7 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
 
       <button
         type="submit"
-        className="rounded-lg border border-cyan-300/50 bg-cyan-300/10 px-5 py-2 text-sm font-semibold uppercase tracking-[0.14em] text-cyan-100 transition hover:bg-cyan-300/20"
+        className="w-full bg-[var(--text-primary)] px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90 sm:w-auto"
       >
         {submitLabel}
       </button>

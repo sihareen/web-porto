@@ -15,42 +15,50 @@ export default async function AdminProjectsPage() {
   }
 
   return (
-    <main className="space-y-5">
-      <div className="flex items-center justify-between gap-3">
-        <h1 className="font-[family-name:var(--font-heading)] text-2xl text-slate-100">Manage Projects</h1>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <h1 className="text-2xl font-bold uppercase tracking-tight text-[var(--text-primary)]">Manage Projects</h1>
         <a
           href="/admin/projects/new"
-          className="rounded-md border border-cyan-300/50 bg-cyan-300/10 px-4 py-2 text-xs uppercase tracking-[0.15em] text-cyan-100"
+          className="inline-flex items-center justify-center bg-[var(--text-primary)] px-6 py-3 text-xs font-bold uppercase tracking-wider text-[var(--surface)] transition-opacity hover:opacity-90"
         >
           Add Project
         </a>
       </div>
 
+      <div className="h-px w-full bg-[var(--border)]" />
+
       <div className="space-y-3">
         {hasDbError ? (
-          <p className="rounded-xl border border-rose-400/30 bg-rose-500/10 p-4 text-sm text-rose-200">
+          <div className="border border-rose-400/30 bg-rose-500/5 p-4 text-sm text-rose-700">
             Gagal memuat data project dari database. Periksa konfigurasi `DATABASE_URL`.
-          </p>
+          </div>
         ) : null}
         {projects.length === 0 ? (
-          <p className="rounded-xl border border-cyan-300/15 bg-slate-900/60 p-4 text-sm text-slate-300">
-            No projects yet. Create your first one.
-          </p>
+          <div className="border border-[var(--border)] bg-[var(--surface)] p-6 text-center">
+            <p className="text-sm text-[var(--text-secondary)]">No projects yet. Create your first one.</p>
+          </div>
         ) : (
           projects.map((project) => (
             <article
               key={project.id}
-              className="rounded-xl border border-cyan-300/15 bg-slate-900/70 p-4 md:flex md:items-center md:justify-between"
+              className="flex flex-col gap-4 border border-[var(--border)] bg-[var(--surface)] p-5 transition-colors hover:border-[var(--text-primary)] sm:flex-row sm:items-center sm:justify-between"
             >
-              <div>
-                <h2 className="text-lg text-slate-100">{project.title}</h2>
-                <p className="text-xs uppercase tracking-[0.12em] text-slate-400">{project.status}</p>
-                <p className="text-xs text-cyan-200/80">Order: {project.displayOrder}</p>
-                <p className="mt-2 text-sm text-slate-300">/{project.slug}</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-lg font-bold text-[var(--text-primary)]">{project.title}</h2>
+                  <span className="inline-block border border-[var(--border)] px-2 py-1 text-xs font-mono uppercase text-[var(--text-secondary)]">
+                    {project.status}
+                  </span>
+                </div>
+                <p className="text-sm font-mono text-[var(--text-secondary)]">/{project.slug}</p>
+                <p className="text-xs font-mono uppercase tracking-wider text-[var(--text-secondary)]">
+                  Order: {project.displayOrder}
+                </p>
               </div>
               <a
                 href={`/admin/projects/${project.id}/edit`}
-                className="mt-3 inline-block rounded-md border border-cyan-300/30 px-3 py-2 text-xs uppercase tracking-[0.12em] text-cyan-200 md:mt-0"
+                className="inline-flex items-center justify-center border-2 border-[var(--text-primary)] px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-[var(--text-primary)] transition-colors hover:bg-[var(--text-primary)] hover:text-[var(--surface)] sm:self-start"
               >
                 Edit
               </a>
@@ -58,6 +66,6 @@ export default async function AdminProjectsPage() {
           ))
         )}
       </div>
-    </main>
+    </div>
   );
 }
