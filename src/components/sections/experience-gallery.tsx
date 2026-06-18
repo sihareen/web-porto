@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FiArrowRight, FiBookOpen, FiBriefcase } from "react-icons/fi";
+import { FiBookOpen, FiBriefcase } from "react-icons/fi";
 
 type ExperienceCardItem = {
   period: string;
@@ -118,11 +118,10 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                         )}
                       </article>
 
-                      {/* Horizontal Connector Arrow (except last in row) */}
+                      {/* Horizontal Dashed Connector (except last in row) */}
                       {!isLastInRow && (
                         <div className="absolute top-1/2 -right-2 z-10 flex items-center -translate-y-1/2">
-                          <div className="w-8 h-0.5 bg-[var(--border)]" />
-                          <FiArrowRight className="h-5 w-5 text-[var(--border)] -ml-1" />
+                          <div className="w-8 h-px border-t border-dashed border-[var(--border)] opacity-60" />
                         </div>
                       )}
                     </div>
