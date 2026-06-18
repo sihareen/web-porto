@@ -20,121 +20,111 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
-  const rows: ExperienceCardItem[][] = [];
-  for (let i = 0; i < items.length; i += 4) {
-    const row = items.slice(i, i + 4);
-    rows.push(row);
-  }
-
   const selectedItem = selectedIndex !== null ? items[selectedIndex] : null;
 
   return (
     <>
-      <div className="space-y-6">
-        {rows.map((row, rowIndex) => {
-          const startIndex = rowIndex * 4;
+      <div className="max-w-[1280px] mx-auto">
+        <div className="hidden md:grid md:grid-cols-4 gap-6">
+          {items.map((item, actualIndex) => {
+            const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+            const isLastInRow = (actualIndex + 1) % 4 === 0;
+            const isHovered = hoveredIndex === actualIndex;
 
-          return (
-            <div key={rowIndex}>
-              <div className="hidden md:block">
-                <div className="relative grid grid-cols-4 gap-5">
-                  {row.map((item, colIndex) => {
-                    const actualIndex = startIndex + colIndex;
-                    const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
-                    const isLastInRow = colIndex === row.length - 1;
-                    const isHovered = hoveredIndex === actualIndex;
-
-                    return (
-                      <div key={actualIndex} className="relative">
-                        <article 
-                          className="group relative border border-[var(--border)] bg-white p-6 h-[220px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col"
-                          onMouseEnter={() => setHoveredIndex(actualIndex)}
-                          onMouseLeave={() => setHoveredIndex(null)}
-                          onClick={() => setSelectedIndex(actualIndex)}
-                        >
-                          <div className="flex items-start justify-between mb-4">
-                            <span className="text-5xl font-black font-mono text-[var(--accent)] leading-none">
-                              {milestoneNumber}
-                            </span>
-                            {item.category === "EDUCATION" ? (
-                              <FiBookOpen className="h-7 w-7 text-[var(--accent)]" />
-                            ) : (
-                              <FiBriefcase className="h-7 w-7 text-[var(--accent)]" />
-                            )}
-                          </div>
-
-                          <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-3 leading-snug">
-                            {item.title}
-                          </h3>
-
-                          {item.company && (
-                            <p className="text-xs text-[var(--accent)] mb-auto">
-                              {item.company}
-                            </p>
-                          )}
-
-                          <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2 mt-4">
-                            <FiCalendar className="h-3.5 w-3.5" />
-                            {item.period}
-                          </p>
-                        </article>
-
-                        {!isLastInRow && (
-                          <div className="absolute top-1/2 -right-2.5 z-10 flex items-center -translate-y-1/2 gap-0">
-                            <div className="w-4 h-px border-t border-dashed border-[var(--accent)] opacity-30" />
-                            <div className="w-1.5 h-1.5 border border-[var(--accent)] bg-white opacity-50" />
-                            <div className="w-4 h-px border-t border-dashed border-[var(--accent)] opacity-30" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="md:hidden space-y-3">
-                {row.map((item, colIndex) => {
-                  const actualIndex = startIndex + colIndex;
-                  const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
-
-                  return (
-                    <article 
-                      key={actualIndex}
-                      className="border border-[var(--border)] bg-white p-4 h-[180px] cursor-pointer hover:border-[var(--accent)] flex flex-col"
-                      onClick={() => setSelectedIndex(actualIndex)}
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <span className="text-4xl font-black font-mono text-[var(--accent)] leading-none">
-                          {milestoneNumber}
-                        </span>
-                        {item.category === "EDUCATION" ? (
-                          <FiBookOpen className="h-6 w-6 text-[var(--accent)]" />
-                        ) : (
-                          <FiBriefcase className="h-6 w-6 text-[var(--accent)]" />
-                        )}
-                      </div>
-
-                      <h3 className="text-xs font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-snug">
-                        {item.title}
-                      </h3>
-
-                      {item.company && (
-                        <p className="text-xs text-[var(--accent)] mb-auto">
-                          {item.company}
-                        </p>
+            return (
+              <div key={actualIndex} className="relative">
+                <article 
+                  className="group relative border border-[var(--border)] bg-white p-6 h-[240px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col justify-between"
+                  onMouseEnter={() => setHoveredIndex(actualIndex)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onClick={() => setSelectedIndex(actualIndex)}
+                >
+                  <div>
+                    <div className="flex items-start justify-between mb-5">
+                      <span className="text-5xl font-black font-mono text-[var(--accent)] leading-none">
+                        {milestoneNumber}
+                      </span>
+                      {item.category === "EDUCATION" ? (
+                        <FiBookOpen className="h-7 w-7 text-[var(--accent)]" />
+                      ) : (
+                        <FiBriefcase className="h-7 w-7 text-[var(--accent)]" />
                       )}
+                    </div>
 
-                      <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2 mt-3">
-                        <FiCalendar className="h-3 w-3" />
-                        {item.period}
+                    <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-3 leading-snug">
+                      {item.title}
+                    </h3>
+
+                    {item.company && (
+                      <p className="text-sm text-[var(--accent)] mb-4">
+                        {item.company}
                       </p>
-                    </article>
-                  );
-                })}
+                    )}
+                  </div>
+
+                  <div className="border-t border-[var(--border)] pt-3">
+                    <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
+                      <FiCalendar className="h-3.5 w-3.5" />
+                      {item.period}
+                    </p>
+                  </div>
+                </article>
+
+                {!isLastInRow && (
+                  <div className="absolute top-1/2 -right-3 z-10 flex items-center -translate-y-1/2 gap-0">
+                    <div className="w-5 h-px border-t border-dashed border-[var(--accent)] opacity-50" />
+                    <div className="w-2 h-2 border border-[var(--accent)] bg-white opacity-60" />
+                    <div className="w-5 h-px border-t border-dashed border-[var(--accent)] opacity-50" />
+                  </div>
+                )}
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        <div className="md:hidden space-y-4">
+          {items.map((item, actualIndex) => {
+            const milestoneNumber = String(actualIndex + 1).padStart(2, '0');
+
+            return (
+              <article 
+                key={actualIndex}
+                className="border border-[var(--border)] bg-white p-5 h-[200px] cursor-pointer hover:border-[var(--accent)] flex flex-col justify-between"
+                onClick={() => setSelectedIndex(actualIndex)}
+              >
+                <div>
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-4xl font-black font-mono text-[var(--accent)] leading-none">
+                      {milestoneNumber}
+                    </span>
+                    {item.category === "EDUCATION" ? (
+                      <FiBookOpen className="h-6 w-6 text-[var(--accent)]" />
+                    ) : (
+                      <FiBriefcase className="h-6 w-6 text-[var(--accent)]" />
+                    )}
+                  </div>
+
+                  <h3 className="text-sm font-bold uppercase tracking-tight text-[var(--primary)] mb-2 leading-snug">
+                    {item.title}
+                  </h3>
+
+                  {item.company && (
+                    <p className="text-xs text-[var(--accent)] mb-3">
+                      {item.company}
+                    </p>
+                  )}
+                </div>
+
+                <div className="border-t border-[var(--border)] pt-3">
+                  <p className="text-xs font-semibold text-[var(--accent)] flex items-center gap-2">
+                    <FiCalendar className="h-3 w-3" />
+                    {item.period}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
+        </div>
       </div>
 
       {selectedItem && (
