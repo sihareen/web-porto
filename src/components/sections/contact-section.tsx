@@ -8,7 +8,7 @@ export function ContactSection() {
     <SectionShell id="contact" sectionNumber="06" title="Contact">
       <div className="mx-auto max-w-2xl space-y-8">
         <p className="text-center text-lg leading-[1.7] text-[var(--secondary)]">
-          Available for intelligent systems engineering projects
+          Available for IoT and embedded systems engineering projects
         </p>
 
         <div className="flex justify-center">

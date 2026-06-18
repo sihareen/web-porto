@@ -7,24 +7,24 @@ type CapabilityDomain = {
 
 const capabilities: CapabilityDomain[] = [
   {
-    category: "Systems Engineering",
-    technologies: ["Embedded Systems", "IoT Architecture", "Edge Computing", "Real-Time Systems"],
+    category: "IoT & Embedded Systems",
+    technologies: ["Embedded Development", "IoT Architecture", "Edge Computing", "Real-Time Systems", "Microcontrollers"],
   },
   {
-    category: "Software Development",
-    technologies: ["Python", "C/C++", "Node.js", "Laravel", "Backend Systems"],
+    category: "Electronic Systems",
+    technologies: ["Circuit Interfacing", "Sensor Integration", "Instrumentation", "Electronic Design", "Hardware Platforms"],
   },
   {
-    category: "Communication Protocols",
-    technologies: ["MQTT", "TCP/IP", "LoRa", "Telemetry", "VoIP", "Network Engineering"],
+    category: "Communication & Telemetry",
+    technologies: ["MQTT", "TCP/IP", "LoRa", "Telemetry Systems", "VoIP", "Wireless Networks"],
   },
   {
-    category: "Artificial Intelligence",
+    category: "Applied Artificial Intelligence",
     technologies: ["YOLOv8", "TensorFlow", "Computer Vision", "Edge AI", "Model Deployment"],
   },
   {
-    category: "Hardware Platforms",
-    technologies: ["Raspberry Pi", "ESP32", "Single Board Computers", "PLC", "Linux", "Microcontrollers"],
+    category: "Engineering Tools",
+    technologies: ["Python", "C/C++", "Node.js", "Laravel", "Raspberry Pi", "ESP32", "PLC", "Linux"],
   },
 ];
 

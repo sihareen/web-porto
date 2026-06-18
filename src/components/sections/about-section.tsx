@@ -21,22 +21,22 @@ export function AboutSection() {
         <div className="flex flex-col justify-center space-y-8">
           <div className="space-y-6 text-lg leading-[1.8] text-[var(--text-primary)]">
             <p>
-              I architect intelligent systems from embedded hardware through cloud integration. My work spans the complete engineering stack: hardware interfacing, firmware development, communication protocols, backend systems, and AI deployment.
+              Electrical Engineer specializing in IoT architecture, embedded systems, and telemetry networks. My work spans the complete engineering stack: electronic circuit interfacing, firmware development, communication protocols, instrumentation systems, and edge AI deployment.
             </p>
             <p>
-              Projects range from tsunami early warning buoys and emergency VoIP systems to AI-powered quality control and autonomous edge devices. Each implementation emphasizes reliable field operation, maintainable architecture, and measurable outcomes.
+              Projects include tsunami early warning buoy systems, emergency VoIP communication networks, AI-powered quality control systems, and autonomous connected devices. Each implementation emphasizes reliable field operation, robust electronic design, and measurable outcomes.
             </p>
             <p>
-              Electrical Engineering graduate from Universitas Lampung. Thesis focused on Python-based transmission systems for remote ocean monitoring platforms.
+              Bachelor of Electrical Engineering from Universitas Lampung. Thesis focused on Python-based telemetry transmission systems for remote ocean monitoring platforms.
             </p>
           </div>
 
           <div className="border-l-[3px] border-l-[var(--accent)] bg-[var(--surface)] p-6">
             <p className="text-base font-bold text-[var(--primary)]">
-              Open to collaboration on intelligent systems projects
+              Open to collaboration on IoT and embedded systems projects
             </p>
             <p className="mt-2 text-base leading-[1.7] text-[var(--secondary)]">
-              IoT architecture · Embedded development · Edge AI · System integration
+              IoT architecture · Embedded development · Telemetry systems · Electronic instrumentation
             </p>
           </div>
         </div>

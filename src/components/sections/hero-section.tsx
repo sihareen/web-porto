@@ -6,7 +6,7 @@ export function HeroSection() {
           <div className="flex items-center justify-between">
             <span className="section-number text-base">01</span>
             <div className="h-px flex-1 bg-[var(--border)] mx-6" />
-            <span className="text-xs font-mono tracking-wider text-[var(--accent)] uppercase">Systems Engineer</span>
+            <span className="text-xs font-mono tracking-wider text-[var(--accent)] uppercase">Electrical Engineer</span>
           </div>
           
           <div className="space-y-12">
@@ -17,15 +17,15 @@ export function HeroSection() {
               
               <div className="flex flex-col gap-1 text-[clamp(1.125rem,2vw,1.375rem)] font-semibold leading-[1.3] text-[var(--secondary)]">
                 <p>IoT Engineer</p>
-                <p>Embedded Systems Developer</p>
-                <p>AI Systems Builder</p>
+                <p>Embedded Systems Specialist</p>
+                <p>Telemetry & Communication Systems</p>
               </div>
             </div>
             
             <div className="h-px w-full bg-[var(--border)]" />
             
             <p className="max-w-[680px] text-[1.25rem] leading-[1.5] text-[var(--text-primary)] font-medium">
-              Building intelligent systems that connect hardware, software, and artificial intelligence.
+              Electrical Engineer specializing in IoT architecture, embedded systems, telemetry networks, and intelligent automation.
             </p>
             
             <div className="flex flex-wrap items-center gap-4 pt-6">
