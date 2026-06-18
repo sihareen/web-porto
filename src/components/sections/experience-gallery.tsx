@@ -34,7 +34,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
             return (
               <div key={actualIndex} className="relative">
                 <article 
-                  className="group relative border border-[var(--border)] bg-white p-6 h-[240px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col overflow-hidden"
+                  className="group relative border border-[var(--border)] bg-white p-7 h-[288px] transition-all duration-200 hover:border-[var(--accent)] hover:shadow-sm cursor-pointer flex flex-col overflow-hidden"
                   onMouseEnter={() => setHoveredIndex(actualIndex)}
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={() => setSelectedIndex(actualIndex)}
@@ -89,7 +89,7 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
             return (
               <article 
                 key={actualIndex}
-                className="border border-[var(--border)] bg-white p-5 h-[200px] cursor-pointer hover:border-[var(--accent)] flex flex-col overflow-hidden"
+                className="border border-[var(--border)] bg-white p-6 h-[240px] cursor-pointer hover:border-[var(--accent)] flex flex-col overflow-hidden"
                 onClick={() => setSelectedIndex(actualIndex)}
               >
                 <div className="flex-1 min-h-0 flex flex-col">
