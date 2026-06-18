@@ -63,13 +63,13 @@ export function ExperienceGallery({ items }: ExperienceGalleryProps) {
                         </div>
 
                         {/* Role - Emphasized */}
-                        <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-3 line-clamp-2 leading-tight">
+                        <h3 className="text-base font-bold uppercase tracking-tight text-[var(--primary)] mb-3 leading-tight">
                           {item.title}
                         </h3>
 
                         {/* Organization - Emphasized */}
                         {item.company && (
-                          <p className="text-sm font-semibold text-[var(--secondary)] mb-3 line-clamp-1">
+                          <p className="text-sm font-semibold text-[var(--secondary)] mb-3">
                             {item.company}
                           </p>
                         )}
