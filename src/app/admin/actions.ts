@@ -136,6 +136,7 @@ export async function createProjectAction(formData: FormData) {
   const parsed = projectFormSchema.safeParse(readFormData(formData));
 
   if (!parsed.success) {
+    console.error("createProjectAction validation errors:", JSON.stringify(parsed.error.issues));
     redirect("/admin/projects/new?error=invalid_input");
   }
 
@@ -178,6 +179,7 @@ export async function updateProjectAction(projectId: string, formData: FormData)
   const parsed = projectFormSchema.safeParse(readFormData(formData));
 
   if (!parsed.success) {
+    console.error("updateProjectAction validation errors:", JSON.stringify(parsed.error.issues));
     redirect(`/admin/projects/${projectId}/edit?error=invalid_input`);
   }
 
@@ -239,6 +241,7 @@ export async function createExperienceAction(formData: FormData) {
   const parsed = experienceFormSchema.safeParse(readExperienceFormData(formData));
 
   if (!parsed.success) {
+    console.error("createExperienceAction validation errors:", JSON.stringify(parsed.error.issues));
     redirect("/admin/experiences/new?error=invalid_input");
   }
 
@@ -269,6 +272,7 @@ export async function updateExperienceAction(experienceId: string, formData: For
   const parsed = experienceFormSchema.safeParse(readExperienceFormData(formData));
 
   if (!parsed.success) {
+    console.error("updateExperienceAction validation errors:", JSON.stringify(parsed.error.issues));
     redirect(`/admin/experiences/${experienceId}/edit?error=invalid_input`);
   }
 
