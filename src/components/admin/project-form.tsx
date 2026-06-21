@@ -1,4 +1,5 @@
 import { ProjectStatus } from "@prisma/client";
+import { CoverUpload } from "./cover-upload";
 
 type ProjectFormDefaults = {
   title?: string;
@@ -17,12 +18,13 @@ type ProjectFormProps = {
   action: (formData: FormData) => void | Promise<void>;
   submitLabel: string;
   coverFiles: string[];
+  referer: string;
   defaults?: ProjectFormDefaults;
 };
 
 const PROJECT_LABELS = ["IoT", "AI", "Data"] as const;
 
-export function ProjectForm({ action, submitLabel, coverFiles, defaults }: ProjectFormProps) {
+export function ProjectForm({ action, submitLabel, coverFiles, referer, defaults }: ProjectFormProps) {
   return (
     <form action={action} className="space-y-6 border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
       <div className="grid gap-5 sm:grid-cols-2">
@@ -116,6 +118,8 @@ export function ProjectForm({ action, submitLabel, coverFiles, defaults }: Proje
       </div>
 
       <div className="h-px w-full bg-[var(--border)]" />
+
+      <CoverUpload referer={referer} />
 
       <label className="space-y-2 text-sm font-medium text-[var(--text-primary)]">
         Cover Image (thumbnail)

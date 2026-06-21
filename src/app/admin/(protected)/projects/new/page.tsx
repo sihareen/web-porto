@@ -3,7 +3,7 @@ import { ProjectForm } from "@/components/admin/project-form";
 import { listProjectCoverFiles } from "@/lib/project-covers";
 
 type NewProjectPageProps = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; upload?: string; message?: string; file?: string }>;
 };
 
 export default async function NewProjectPage({ searchParams }: NewProjectPageProps) {
@@ -17,6 +17,15 @@ export default async function NewProjectPage({ searchParams }: NewProjectPagePro
         : params.error
           ? "Invalid input. Please review all fields."
           : null;
+
+  const uploadMessage =
+    params.upload === "success"
+      ? `File "${params.file}" berhasil diupload.`
+      : params.upload === "error"
+        ? params.message
+          ? decodeURIComponent(params.message)
+          : "Upload gagal."
+        : null;
 
   return (
     <div className="space-y-6">
@@ -38,7 +47,19 @@ export default async function NewProjectPage({ searchParams }: NewProjectPagePro
         </div>
       ) : null}
 
-      <ProjectForm action={createProjectAction} submitLabel="Create Project" coverFiles={coverFiles} />
+      {uploadMessage ? (
+        <div
+          className={`border p-4 text-sm ${
+            params.upload === "success"
+              ? "border-emerald-400/30 bg-emerald-500/5 text-emerald-700"
+              : "border-rose-400/30 bg-rose-500/5 text-rose-700"
+          }`}
+        >
+          {uploadMessage}
+        </div>
+      ) : null}
+
+      <ProjectForm action={createProjectAction} submitLabel="Create Project" coverFiles={coverFiles} referer="/admin/projects/new" />
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { getPrisma } from "@/lib/prisma";
 
 type EditProjectPageProps = {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; upload?: string; message?: string; file?: string }>;
 };
 
 export default async function EditProjectPage({ params, searchParams }: EditProjectPageProps) {
@@ -22,6 +22,15 @@ export default async function EditProjectPage({ params, searchParams }: EditProj
         : query.error
           ? "Invalid input. Please review all fields."
           : null;
+
+  const uploadMessage =
+    query.upload === "success"
+      ? `File "${query.file}" berhasil diupload.`
+      : query.upload === "error"
+        ? query.message
+          ? decodeURIComponent(query.message)
+          : "Upload gagal."
+        : null;
 
   const project = await getPrisma().project.findUnique({ where: { id } });
   if (!project) {
@@ -63,10 +72,23 @@ export default async function EditProjectPage({ params, searchParams }: EditProj
         </div>
       ) : null}
 
+      {uploadMessage ? (
+        <div
+          className={`border p-4 text-sm ${
+            query.upload === "success"
+              ? "border-emerald-400/30 bg-emerald-500/5 text-emerald-700"
+              : "border-rose-400/30 bg-rose-500/5 text-rose-700"
+          }`}
+        >
+          {uploadMessage}
+        </div>
+      ) : null}
+
       <ProjectForm
         action={boundUpdateAction}
         submitLabel="Update Project"
         coverFiles={coverFiles}
+        referer={`/admin/projects/${id}/edit`}
         defaults={{
           title: project.title,
           description: project.description,

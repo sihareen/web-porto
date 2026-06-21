@@ -5,12 +5,18 @@ import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+import { writeFile } from "node:fs/promises";
+import path from "node:path";
+
 import { authenticateAdmin, requireAdminSession } from "@/lib/auth";
 import { normalizeProjectCoverFileNames, serializeProjectCoverImagesFromFileNames } from "@/lib/project-covers";
 import { getPrisma } from "@/lib/prisma";
 import { createUniqueProjectSlug } from "@/lib/slug";
 import { ADMIN_SESSION_COOKIE, signAdminSession } from "@/lib/session";
 import { experienceFormSchema, loginSchema, projectFormSchema } from "@/lib/validation";
+
+const ALLOWED_IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif"]);
+const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
 
 const PROJECT_LABELS = ["IoT", "AI", "Data"] as const;
 const PROJECT_LABEL_SET = new Set<string>(PROJECT_LABELS);
@@ -129,6 +135,42 @@ export async function logoutAdminAction() {
   const cookieStore = await cookies();
   cookieStore.delete(ADMIN_SESSION_COOKIE);
   redirect("/admin/login");
+}
+
+export async function uploadCoverImageAction(formData: FormData) {
+  await requireAdminSession();
+
+  const referer = formData.get("_referer") as string | null;
+  const fallback = "/admin/projects/new";
+
+  const file = formData.get("file");
+  if (!file || !(file instanceof File) || file.size === 0) {
+    redirect(`${referer || fallback}?upload=error&message=No+file+selected.`);
+  }
+
+  if (file.size > MAX_UPLOAD_SIZE) {
+    redirect(`${referer || fallback}?upload=error&message=File+terlalu+besar.+Maksimal+10+MB.`);
+  }
+
+  const ext = path.extname(file.name).toLowerCase();
+  if (!ALLOWED_IMAGE_EXTENSIONS.has(ext)) {
+    redirect(`${referer || fallback}?upload=error&message=Tipe+file+tidak+valid.+Allowed:+png,+jpg,+jpeg,+webp,+gif.`);
+  }
+
+  const uniqueName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+  const filePath = path.join(process.cwd(), "public", "project-covers", uniqueName);
+
+  try {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    await writeFile(filePath, buffer);
+  } catch (error) {
+    console.error("Failed to save uploaded file:", error);
+    redirect(`${referer || fallback}?upload=error&message=Gagal+menyimpan+file.+Cek+izin+server.`);
+  }
+
+  revalidatePath("/admin/projects/new");
+  revalidatePath("/admin/projects/[id]/edit");
+  redirect(`${referer || fallback}?upload=success&file=${uniqueName}`);
 }
 
 export async function createProjectAction(formData: FormData) {
