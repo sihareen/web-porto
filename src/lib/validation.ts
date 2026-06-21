@@ -1,34 +1,32 @@
 import { ExperienceCategory, ProjectStatus } from "@prisma/client";
 import { z } from "zod";
 
-const urlError = "Must be a valid URL (e.g. https://github.com/username/repo)";
-
 export const loginSchema = z.object({
   email: z.email().min(1),
   password: z.string().min(8),
 });
 
 export const projectFormSchema = z.object({
-  title: z.string().trim().min(3).max(120),
-  description: z.string().trim().min(20).max(1400),
+  title: z.string().trim(),
+  description: z.string().trim(),
   projectLabels: z.array(z.string().trim()).default([]),
-  techStack: z.string().trim().min(2).max(300),
-  externalUrl: z.string().trim().url(urlError),
+  techStack: z.string().trim(),
+  externalUrl: z.string().trim(),
   coverImageFileName: z.string().trim().optional().nullable(),
   galleryImageFileNames: z.array(z.string().trim()).default([]),
   existingCoverImagesRaw: z.string().trim().optional().nullable(),
-  displayOrder: z.coerce.number().int().min(0).max(9999),
+  displayOrder: z.coerce.number().int(),
   status: z.enum(ProjectStatus),
 });
 
 export const experienceFormSchema = z.object({
-  period: z.string().trim().min(3).max(80),
-  title: z.string().trim().min(3).max(120),
-  company: z.string().trim().max(120).optional().nullable(),
-  description: z.string().trim().min(20).max(1000),
-  tags: z.string().trim().min(2).max(220),
+  period: z.string().trim(),
+  title: z.string().trim(),
+  company: z.string().trim().optional().nullable(),
+  description: z.string().trim(),
+  tags: z.string().trim(),
   category: z.enum(ExperienceCategory),
-  displayOrder: z.coerce.number().int().min(0).max(9999),
+  displayOrder: z.coerce.number().int(),
 });
 
 export type ProjectFormValues = z.infer<typeof projectFormSchema>;

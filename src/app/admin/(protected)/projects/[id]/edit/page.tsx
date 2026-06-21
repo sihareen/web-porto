@@ -20,7 +20,7 @@ export default async function EditProjectPage({ params, searchParams }: EditProj
       : query.error === "db_error"
         ? "Gagal update/delete ke database. Cek koneksi DATABASE_URL lalu coba ulang."
         : query.error
-          ? "Invalid input. Check: Title (3-120 chars), Description (min 20 chars), Tech Stack (min 2 chars), External URL (must include https://), Display Order (0-9999)."
+          ? "Invalid input. Please review all fields."
           : null;
 
   const project = await getPrisma().project.findUnique({ where: { id } });

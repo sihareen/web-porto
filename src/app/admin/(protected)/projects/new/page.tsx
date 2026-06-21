@@ -15,7 +15,7 @@ export default async function NewProjectPage({ searchParams }: NewProjectPagePro
       : params.error === "db_error"
         ? "Gagal menyimpan project ke database. Cek koneksi DATABASE_URL dan coba ulang."
         : params.error
-          ? "Invalid input. Check: Title (3-120 chars), Description (min 20 chars), Tech Stack (min 2 chars), External URL (must include https://), Display Order (0-9999)."
+          ? "Invalid input. Please review all fields."
           : null;
 
   return (

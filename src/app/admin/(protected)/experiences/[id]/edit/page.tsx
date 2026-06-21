@@ -16,7 +16,7 @@ export default async function EditExperiencePage({ params, searchParams }: EditE
     query.error === "db_error"
       ? "Failed to update/delete entry in database. Check DATABASE_URL and retry."
       : query.error
-        ? "Invalid input. Check: Period (3-80 chars), Title (3-120 chars), Description (min 20 chars), Tags (min 2 chars), Display Order (0-9999)."
+        ? "Invalid input. Please review all fields."
         : null;
 
   const entry = await getPrisma().experienceEntry.findUnique({ where: { id } });

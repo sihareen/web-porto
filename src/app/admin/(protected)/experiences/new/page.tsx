@@ -11,7 +11,7 @@ export default async function NewExperiencePage({ searchParams }: NewExperienceP
     params.error === "db_error"
       ? "Failed to save entry to database. Check DATABASE_URL and retry."
       : params.error
-        ? "Invalid input. Check: Period (3-80 chars), Title (3-120 chars), Description (min 20 chars), Tags (min 2 chars), Display Order (0-9999)."
+        ? "Invalid input. Please review all fields."
         : null;
 
   return (
